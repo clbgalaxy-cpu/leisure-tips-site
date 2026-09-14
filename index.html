@@ -288,6 +288,31 @@
   .info-block .lbl{font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted);}
   .info-block p{font-size:.92rem; color:var(--ink); white-space:pre-line;}
 
+  /* ---------- Info accordion (Thông tin địa phương) ---------- */
+  .info-acc-list{display:flex; flex-direction:column; gap:.85em;}
+  .info-acc{border:1px solid var(--line); border-radius:var(--radius-m); background:var(--bg-raised); overflow:hidden; transition:border-color .2s ease, box-shadow .2s ease;}
+  .info-acc.is-open{border-color:var(--acc-c, var(--forest)); box-shadow:0 8px 22px -16px var(--acc-c, var(--forest));}
+  .info-acc-head{display:flex; align-items:center; gap:1em; width:100%; padding:var(--sp-2) var(--sp-3); background:none; border:0; cursor:pointer; text-align:left; font-family:inherit; color:inherit;}
+  .info-acc-head:hover .info-acc-ic{transform:scale(1.06);}
+  .info-acc-ic{width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex:none; background:var(--acc-tint, var(--forest-tint)); color:var(--acc-c, var(--forest)); transition:transform .2s ease;}
+  .info-acc-ic .icon{width:21px; height:21px;}
+  .info-acc-head h3{font-family:var(--font-display); font-style:italic; font-weight:700; font-size:1.2rem; flex:1; letter-spacing:-.01em; color:var(--ink);}
+  .info-acc-chevron{flex:none; width:30px; height:30px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; transition:transform .25s ease, background .2s ease, color .2s ease; color:var(--ink-muted);}
+  .info-acc-chevron .icon{width:16px; height:16px; stroke-width:2.4;}
+  .info-acc.is-open .info-acc-chevron{transform:rotate(180deg); background:var(--acc-tint, var(--forest-tint)); color:var(--acc-c, var(--forest)); border-color:transparent;}
+  .info-acc-body-wrap{display:grid; grid-template-rows:0fr; transition:grid-template-rows .3s ease;}
+  .info-acc.is-open .info-acc-body-wrap{grid-template-rows:1fr;}
+  .info-acc-body-inner{overflow:hidden;}
+  .info-acc-body{padding:0 var(--sp-3) var(--sp-3) calc(44px + var(--sp-3) + 1em); font-size:.98rem; color:var(--ink); white-space:pre-line; line-height:1.68;}
+  .info-acc[data-accent="0"]{--acc-tint:var(--forest-tint); --acc-c:var(--forest);}
+  .info-acc[data-accent="1"]{--acc-tint:var(--dawn-tint); --acc-c:var(--dawn);}
+  @media (max-width:640px){
+    .info-acc-ic{width:38px; height:38px;}
+    .info-acc-ic .icon{width:18px; height:18px;}
+    .info-acc-head h3{font-size:1.05rem;}
+    .info-acc-body{padding-left:calc(38px + var(--sp-2) + 1em); font-size:.92rem;}
+  }
+
   .card{
     border:1px solid var(--line); border-radius:var(--radius-m); background:var(--bg-raised);
     display:flex; flex-direction:column; overflow:hidden; text-align:left; cursor:pointer; width:100%;
@@ -628,6 +653,12 @@
     <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
     <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
     <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></symbol>
+    <symbol id="i-shirt" viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 .55.45 1 1.01 1h9.98c.56 0 1.01-.45 1.01-1V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></symbol>
+    <symbol id="i-landmark" viewBox="0 0 24 24"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
   </defs>
 </svg>
 
@@ -820,14 +851,14 @@
         <h2>Thông tin địa phương</h2>
         <p class="desc">Thời tiết, ăn mặc, văn hoá, lịch sử và điểm nhấn du lịch được biết đến.</p>
       </div>
-      <div class="grid grid-2" id="pd-info-grid"></div>
+      <div class="info-acc-list" id="pd-info-grid"></div>
     </section>
 
     <section class="wrap" id="pd-stay-section">
       <div class="section-head">
         <h2>Homestay &amp; món ăn đặc trưng</h2>
       </div>
-      <div class="grid grid-2" id="pd-stay-grid"></div>
+      <div class="info-acc-list" id="pd-stay-grid"></div>
     </section>
 
     <hr class="rule wrap">
@@ -2653,15 +2684,40 @@
   }
   function placeInfoRows(p){
     return [
-      ['Thời tiết', p.weather], ['Ăn mặc', p.dress], ['Văn hoá', p.culture],
-      ['Lịch sử', p.history], ['Điểm nhấn du lịch', p.highlights]
+      ['Thời tiết', p.weather, 'i-sun'], ['Ăn mặc', p.dress, 'i-shirt'], ['Văn hoá', p.culture, 'i-landmark'],
+      ['Lịch sử', p.history, 'i-book'], ['Điểm nhấn du lịch', p.highlights, 'i-star']
     ].filter(function(r){ return r[1] && r[1].trim(); });
   }
   function placeStayRows(p){
     return [
-      ['Homestay gợi ý', p.homestays], ['Món ăn / quán đặc trưng', p.food]
+      ['Homestay gợi ý', p.homestays, 'i-home'], ['Món ăn / quán đặc trưng', p.food, 'i-fork']
     ].filter(function(r){ return r[1] && r[1].trim(); });
   }
+  var infoAccUid = 0;
+  function infoAccHtml(rows){
+    return rows.map(function(r, i){
+      var uid = 'info-acc-' + (infoAccUid++);
+      return '<div class="info-acc" data-accent="'+(i % 2)+'">'+
+        '<button class="info-acc-head" type="button" aria-expanded="false" aria-controls="'+uid+'">'+
+          '<span class="info-acc-ic"><svg class="icon" width="21" height="21"><use href="#'+r[2]+'"/></svg></span>'+
+          '<h3>'+esc(r[0])+'</h3>'+
+          '<span class="info-acc-chevron"><svg class="icon" width="16" height="16"><use href="#i-chevron-down"/></svg></span>'+
+        '</button>'+
+        '<div class="info-acc-body-wrap" id="'+uid+'"><div class="info-acc-body-inner"><p class="info-acc-body">'+esc(r[1])+'</p></div></div>'+
+      '</div>';
+    }).join('');
+  }
+  // Bấm vào tiêu đề (hoặc mũi tên) 1 khối info-acc để xổ/thu — dùng event
+  // delegation trên toàn trang vì các khối được render lại mỗi lần đổi địa phương.
+  document.addEventListener('click', function(e){
+    var head = e.target.closest && e.target.closest('.info-acc-head');
+    if(!head) return;
+    var acc = head.closest('.info-acc');
+    if(!acc) return;
+    var willOpen = !acc.classList.contains('is-open');
+    acc.classList.toggle('is-open', willOpen);
+    head.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  });
   function openPlace(placeId){
     var p = PLACES[placeId];
     if(!p) return;
@@ -2680,18 +2736,14 @@
     var infoSection = document.getElementById('pd-info-section');
     infoSection.hidden = !infoRows.length;
     if(infoRows.length){
-      document.getElementById('pd-info-grid').innerHTML = infoRows.map(function(r){
-        return '<div class="info-block"><span class="lbl">'+esc(r[0])+'</span><p>'+esc(r[1])+'</p></div>';
-      }).join('');
+      document.getElementById('pd-info-grid').innerHTML = infoAccHtml(infoRows);
     }
 
     var stayRows = placeStayRows(p);
     var staySection = document.getElementById('pd-stay-section');
     staySection.hidden = !stayRows.length;
     if(stayRows.length){
-      document.getElementById('pd-stay-grid').innerHTML = stayRows.map(function(r){
-        return '<div class="info-block"><span class="lbl">'+esc(r[0])+'</span><p>'+esc(r[1])+'</p></div>';
-      }).join('');
+      document.getElementById('pd-stay-grid').innerHTML = infoAccHtml(stayRows);
     }
 
     var xpIds = Object.keys(EXPERIENCES).filter(function(k){ return isPublished(k) && EXPERIENCES[k].place === p.name; });
