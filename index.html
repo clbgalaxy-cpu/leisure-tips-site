@@ -981,6 +981,24 @@
     </form>
   </div>
 
+  <div id="admin-recovery" class="admin-login" hidden>
+    <form class="admin-login-card" id="admin-recovery-form">
+      <h1>Đặt mật khẩu mới</h1>
+      <div class="admin-field">
+        <label for="adm-recovery-pass">Mật khẩu mới</label>
+        <input id="adm-recovery-pass" type="password" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+      </div>
+      <div class="admin-field">
+        <label for="adm-recovery-pass2">Nhập lại mật khẩu mới</label>
+        <input id="adm-recovery-pass2" type="password" placeholder="••••••••" required minlength="6">
+      </div>
+      <button type="submit" class="btn btn-primary" style="justify-content:center; margin-top:.4em;">Lưu mật khẩu mới</button>
+      <p class="admin-login-error" id="admin-recovery-error" hidden></p>
+      <p class="admin-login-error" id="admin-recovery-success" hidden style="color:#1a7f4b; background:rgba(26,127,75,.09);"></p>
+      <p class="admin-note">Link đặt lại mật khẩu từ email vừa mở trang này — đặt mật khẩu mới xong sẽ vào thẳng trang quản trị.</p>
+    </form>
+  </div>
+
   <div class="admin-sync-toast" id="adm-sync-error-toast">Không đồng bộ được với Supabase — thay đổi đã lưu tạm trên trình duyệt, kiểm tra lại kết nối mạng rồi thử lại.</div>
   <div id="admin-shell" class="admin-shell" hidden>
     <aside class="admin-sidebar">
@@ -1511,6 +1529,29 @@
       sbClient = window.supabase.createClient(SUPA_URL, SUPA_ANON_KEY);
     }
   }catch(e){ sbClient = null; }
+
+  // Link đặt lại mật khẩu (email "Send password recovery" từ Supabase) mở trang này
+  // kèm token đặc biệt trên URL — SDK tự phát hiện và bắn sự kiện PASSWORD_RECOVERY,
+  // lúc đó hiện form đặt mật khẩu mới thay vì màn hình đăng nhập thường.
+  if(sbClient){
+    try{
+      sbClient.auth.onAuthStateChange(function(event){
+        if(event === 'PASSWORD_RECOVERY'){
+          var siteRootEl = document.getElementById('site-root');
+          var adminRootEl = document.getElementById('admin-root');
+          var loginBox = document.getElementById('admin-login');
+          var shellBox = document.getElementById('admin-shell');
+          var recoveryBox = document.getElementById('admin-recovery');
+          if(siteRootEl) siteRootEl.hidden = true;
+          if(adminRootEl) adminRootEl.hidden = false;
+          if(loginBox) loginBox.hidden = true;
+          if(shellBox) shellBox.hidden = true;
+          if(recoveryBox) recoveryBox.hidden = false;
+          window.scrollTo({top:0});
+        }
+      });
+    }catch(e){}
+  }
 
   function setSyncBadge(isLive){
     var b = document.getElementById('admin-sync-badge');
@@ -2791,6 +2832,50 @@
         })
         .then(function(){
           if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = 'Đăng nhập'; }
+        });
+    });
+  }
+
+  var admRecoveryForm = document.getElementById('admin-recovery-form');
+  if(admRecoveryForm){
+    admRecoveryForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var p1 = document.getElementById('adm-recovery-pass').value;
+      var p2 = document.getElementById('adm-recovery-pass2').value;
+      var errEl = document.getElementById('admin-recovery-error');
+      var okEl = document.getElementById('admin-recovery-success');
+      var submitBtn = admRecoveryForm.querySelector('button[type="submit"]');
+      if(errEl) errEl.hidden = true;
+      if(okEl) okEl.hidden = true;
+      if(p1.length < 6){
+        if(errEl){ errEl.textContent = 'Mật khẩu cần tối thiểu 6 ký tự.'; errEl.hidden = false; }
+        return;
+      }
+      if(p1 !== p2){
+        if(errEl){ errEl.textContent = 'Hai mật khẩu chưa khớp nhau.'; errEl.hidden = false; }
+        return;
+      }
+      if(!sbClient){
+        if(errEl){ errEl.textContent = 'Chưa kết nối được tới Supabase — kiểm tra lại kết nối mạng rồi thử lại.'; errEl.hidden = false; }
+        return;
+      }
+      if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Đang lưu…'; }
+      sbClient.auth.updateUser({ password: p1 })
+        .then(function(res){
+          if(res.error) throw res.error;
+          admRecoveryForm.reset();
+          if(okEl){ okEl.textContent = 'Đặt mật khẩu mới thành công! Đang vào trang quản trị…'; okEl.hidden = false; }
+          setTimeout(function(){
+            var recoveryBox = document.getElementById('admin-recovery');
+            if(recoveryBox) recoveryBox.hidden = true;
+            enterAdminShell();
+          }, 1200);
+        })
+        .catch(function(err){
+          if(errEl){ errEl.textContent = (err && err.message) || 'Có lỗi xảy ra, thử lại.'; errEl.hidden = false; }
+        })
+        .then(function(){
+          if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = 'Lưu mật khẩu mới'; }
         });
     });
   }
