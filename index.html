@@ -245,6 +245,14 @@
   .icon{display:inline-block; vertical-align:-3px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none;}
   .rule{border:0; border-top:1px solid var(--line); margin:0;}
 
+  .sh-actions{display:flex; align-items:center; gap:.7em; flex-wrap:wrap; flex:none;}
+  .reel-nav-light button{width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--bg-raised); color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem;}
+  .reel-nav-light button:hover{border-color:var(--forest); color:var(--forest);}
+  .reel .card{flex:0 0 auto; width:230px;}
+  .reel .review-card{flex:0 0 auto; width:190px;}
+  .reel .local-card{flex:0 0 auto; width:300px;}
+  .swipe-hint-row{display:none;}
+
   /* ---------- Feeling chips ---------- */
   .chip-row{display:flex; flex-wrap:wrap; gap:.65em;}
   .chip{
@@ -585,12 +593,20 @@
     .nearby-grid{grid-template-columns:1fr;}
   }
   @media (max-width:640px){
+    html{font-size:17.5px;}
     .nav-links{display:none;}
     .grid-4, .grid-3, .grid-2{grid-template-columns:1fr 1fr;}
     .form-grid{grid-template-columns:1fr;}
     section{padding-block:var(--sp-5);}
     .hero-cinematic{min-height:560px;}
     .reel-card{width:140px;}
+    .reel-2row{display:grid; grid-auto-flow:column; grid-template-rows:repeat(2,minmax(0,1fr)); grid-auto-columns:min-content; gap:10px;}
+    .reel-2row .card{width:180px;}
+    .reel-2row .review-card{width:160px;}
+    .reel .local-card{width:260px;}
+    .swipe-hint-row{display:flex; justify-content:center; margin-top:.8em;}
+    .swipe-hint{font-size:.78rem; color:var(--ink-muted); background:var(--bg-sunken); border:1px solid var(--line); border-radius:999px; padding:.5em 1.2em; cursor:pointer; font-family:inherit;}
+    .sh-actions{gap:.5em;}
   }
   @media (max-width:460px){
     .grid-4, .grid-3, .grid-2{grid-template-columns:1fr;}
@@ -708,25 +724,41 @@
           <div class="sh-title"><span class="sh-icon"><svg class="icon" width="19" height="19"><use href="#i-pin"/></svg></span><h2 id="sh-places-title">Đi đâu đó khác một chút?</h2></div>
           <p class="desc" id="sh-places-desc">Điểm đến — chọn theo bản sắc, không theo độ nổi tiếng.</p>
         </div>
-        <button class="btn btn-ghost btn-sm" data-nav="places" style="flex:none;">Xem tất cả điểm đến →</button>
+        <div class="sh-actions">
+          <div class="reel-nav reel-nav-light"><button id="places-reel-prev" aria-label="Trước" type="button">←</button><button id="places-reel-next" aria-label="Tiếp" type="button">→</button></div>
+          <button class="btn btn-ghost btn-sm" data-nav="places" style="flex:none;">Xem tất cả điểm đến →</button>
+        </div>
       </div>
       <div class="reel reel-flush" id="places-reel"></div>
     </section>
 
     <section class="wrap">
       <div class="section-head">
-        <div class="sh-title"><span class="sh-icon"><svg class="icon" width="19" height="19"><use href="#i-compass"/></svg></span><h2 id="sh-dothis-title">Hôm nay làm gì?</h2></div>
-        <p class="desc" id="sh-dothis-desc">Chạm vào một trải nghiệm để xem chi tiết, chỗ ăn/ở gần đó và đặt Local nếu cần.</p>
+        <div>
+          <div class="sh-title"><span class="sh-icon"><svg class="icon" width="19" height="19"><use href="#i-compass"/></svg></span><h2 id="sh-dothis-title">Hôm nay làm gì?</h2></div>
+          <p class="desc" id="sh-dothis-desc">Chạm vào một trải nghiệm để xem chi tiết, chỗ ăn/ở gần đó và đặt Local nếu cần.</p>
+        </div>
+        <div class="sh-actions">
+          <div class="reel-nav reel-nav-light"><button id="dothis-reel-prev" aria-label="Trước" type="button">←</button><button id="dothis-reel-next" aria-label="Tiếp" type="button">→</button></div>
+          <button class="btn btn-ghost btn-sm" data-nav="places" style="flex:none;">Xem tất cả Trải nghiệm →</button>
+        </div>
       </div>
-      <div class="grid grid-4" id="do-this-grid"></div>
+      <div class="reel reel-flush reel-2row" id="do-this-grid"></div>
+      <p class="swipe-hint-row"><button class="swipe-hint" id="dothis-swipe-hint" type="button">Kéo ngang để xem thêm →</button></p>
     </section>
 
     <section class="wrap">
       <div class="section-head">
-        <div class="sh-title"><span class="sh-icon"><svg class="icon" width="19" height="19"><use href="#i-users"/></svg></span><h2 id="sh-meetlocal-title">Local Talent</h2></div>
-        <p class="desc" id="sh-meetlocal-desc">Không phải HDV. Là người biết những góc mà Google Maps không kể.</p>
+        <div>
+          <div class="sh-title"><span class="sh-icon"><svg class="icon" width="19" height="19"><use href="#i-users"/></svg></span><h2 id="sh-meetlocal-title">Local Talent</h2></div>
+          <p class="desc" id="sh-meetlocal-desc">Không phải HDV. Là người biết những góc mà Google Maps không kể.</p>
+        </div>
+        <div class="sh-actions">
+          <div class="reel-nav reel-nav-light"><button id="meetlocal-reel-prev" aria-label="Trước" type="button">←</button><button id="meetlocal-reel-next" aria-label="Tiếp" type="button">→</button></div>
+          <button class="btn btn-ghost btn-sm" data-nav="destinations" style="flex:none;">Xem tất cả Local →</button>
+        </div>
       </div>
-      <div class="grid grid-3" id="meetlocal-grid"></div>
+      <div class="reel reel-flush" id="meetlocal-grid"></div>
     </section>
 
     <section class="wrap" id="find-local">
@@ -740,10 +772,16 @@
 
     <section class="wrap">
       <div class="section-head">
-        <h2 id="sh-reviews-title">Người thật. Review thật.</h2>
-        <p class="desc" id="sh-reviews-desc">Không copy nội dung KOL/KOC — chỉ liên kết tới nguồn gốc.</p>
+        <div>
+          <h2 id="sh-reviews-title">Người thật. Review thật.</h2>
+          <p class="desc" id="sh-reviews-desc">Không copy nội dung KOL/KOC — chỉ liên kết tới nguồn gốc.</p>
+        </div>
+        <div class="sh-actions">
+          <div class="reel-nav reel-nav-light"><button id="reviews-reel-prev" aria-label="Trước" type="button">←</button><button id="reviews-reel-next" aria-label="Tiếp" type="button">→</button></div>
+        </div>
       </div>
-      <div class="grid grid-3" id="reviews-grid"></div>
+      <div class="reel reel-flush reel-2row" id="reviews-grid"></div>
+      <p class="swipe-hint-row"><button class="swipe-hint" id="reviews-swipe-hint" type="button">Kéo ngang để xem thêm →</button></p>
     </section>
 
   </main>
@@ -2503,7 +2541,7 @@
     }
     var related = Object.keys(EXPERIENCES).filter(function(k){ return k !== id && isPublished(k); }).slice(0,3);
     document.getElementById('xp-related-grid').innerHTML = related.map(gridCard).join('');
-    go('experience');
+    go('experience', {id:id});
   }
 
   // ---------- Trang "Locals theo địa phương" (danh mục các tỉnh/điểm đến) ----------
@@ -2677,7 +2715,7 @@
     var pback = document.getElementById('profile-back');
     if(pback) pback.textContent = '← '+p.name;
 
-    go('place-detail');
+    go('place-detail', {id:placeId});
   }
 
   function openLocalsList(expId){
@@ -2704,7 +2742,7 @@
         '<button class="btn btn-primary btn-sm" data-nav="places">Quay lại khám phá</button>'+
       '</div>';
     }
-    go('locals');
+    go('locals', {filterType:'exp', filterVal:expId});
   }
 
   function openLocalsListByPlace(place){
@@ -2731,7 +2769,7 @@
         '<button class="btn btn-primary btn-sm" data-nav="destinations">Quay lại danh sách địa phương</button>'+
       '</div>';
     }
-    go('locals');
+    go('locals', {filterType:'place', filterVal:place});
   }
 
   function openLocalProfile(localId){
@@ -2762,7 +2800,7 @@
     toast.classList.remove('is-visible');
     var form = document.getElementById('lp-book-form');
     if(form) form.reset();
-    go('local-profile');
+    go('local-profile', {id:localId});
   }
 
   var views = {
@@ -2818,11 +2856,50 @@
 
   window.addEventListener('resize', function(){ updateNavIndicator(currentNavKey, true); });
 
-  function go(view){
+  // ---------- Lịch sử điều hướng (nút Back/Forward của trình duyệt) ----------
+  // Mặc định SPA không đụng tới history, nên bấm Back sẽ rời khỏi web luôn thay vì
+  // quay lại đúng trang trước đó bên trong app. Mỗi lần go() đổi trang (trừ lúc đang
+  // xử lý popstate) đẩy 1 mốc lịch sử kèm đủ dữ liệu (id trải nghiệm/địa phương/Local...)
+  // để khi Back/Forward có thể dựng lại đúng trang đó, không chỉ trang trắng.
+  var suppressHistoryPush = false;
+
+  function go(view, histState){
     Object.keys(views).forEach(function(k){ views[k].hidden = (k !== view); });
     window.scrollTo({top:0});
     updateNavActive(view);
+    if(!suppressHistoryPush){
+      var state = Object.assign({view:view}, histState || {});
+      try{ history.pushState(state, '', '#'+view); }catch(e){}
+    }
   }
+
+  function applyHistoryRoute(state){
+    if(!state || !state.view){ go('home'); return; }
+    switch(state.view){
+      case 'experience':
+        if(state.id && EXPERIENCES[state.id]) openExperience(state.id); else go('home');
+        break;
+      case 'place-detail':
+        if(state.id && PLACES[state.id]) openPlace(state.id); else go('places');
+        break;
+      case 'locals':
+        if(state.filterType === 'exp' && state.filterVal) openLocalsList(state.filterVal);
+        else if(state.filterType === 'place' && state.filterVal) openLocalsListByPlace(state.filterVal);
+        else go('destinations');
+        break;
+      case 'local-profile':
+        if(state.id) openLocalProfile(state.id); else go('destinations');
+        break;
+      default:
+        if(views[state.view]) go(state.view); else go('home');
+    }
+  }
+
+  window.addEventListener('popstate', function(e){
+    suppressHistoryPush = true;
+    applyHistoryRoute(e.state);
+    suppressHistoryPush = false;
+  });
 
   document.addEventListener('click', function(e){
     var popupCloseBtn = e.target.closest('#site-popup-close');
@@ -3008,6 +3085,30 @@
   var next = document.getElementById('reel-next');
   if(prev) prev.addEventListener('click', function(){ reel.scrollBy({left:-200, behavior:'smooth'}); });
   if(next) next.addEventListener('click', function(){ reel.scrollBy({left:200, behavior:'smooth'}); });
+
+  function wireReelNav(reelId, prevId, nextId, distance){
+    var el = document.getElementById(reelId);
+    var p = document.getElementById(prevId);
+    var n = document.getElementById(nextId);
+    if(!el) return;
+    if(p) p.addEventListener('click', function(){ el.scrollBy({left:-distance, behavior:'smooth'}); });
+    if(n) n.addEventListener('click', function(){ el.scrollBy({left:distance, behavior:'smooth'}); });
+  }
+  wireReelNav('places-reel', 'places-reel-prev', 'places-reel-next', 260);
+  wireReelNav('do-this-grid', 'dothis-reel-prev', 'dothis-reel-next', 260);
+  wireReelNav('meetlocal-grid', 'meetlocal-reel-prev', 'meetlocal-reel-next', 320);
+  wireReelNav('reviews-grid', 'reviews-reel-prev', 'reviews-reel-next', 220);
+
+  var dothisSwipeHint = document.getElementById('dothis-swipe-hint');
+  if(dothisSwipeHint) dothisSwipeHint.addEventListener('click', function(){
+    var el = document.getElementById('do-this-grid');
+    if(el) el.scrollBy({left: Math.round(el.clientWidth * 0.9), behavior:'smooth'});
+  });
+  var reviewsSwipeHint = document.getElementById('reviews-swipe-hint');
+  if(reviewsSwipeHint) reviewsSwipeHint.addEventListener('click', function(){
+    var el = document.getElementById('reviews-grid');
+    if(el) el.scrollBy({left: Math.round(el.clientWidth * 0.9), behavior:'smooth'});
+  });
 
   function glowVarFromArt(art){
     if(!art) return 'var(--dawn)';
@@ -3859,6 +3960,7 @@
 
   renderStatic();
   updateNavActive('home', true);
+  try{ history.replaceState({view:'home'}, '', '#home'); }catch(e){}
   setSyncBadge(false);
   loadLiveData();
 
