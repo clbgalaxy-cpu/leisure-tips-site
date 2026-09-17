@@ -217,7 +217,7 @@
   .reel{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; padding-block:2px 6px; scrollbar-width:none; margin-inline:calc(-1 * var(--gutter)); padding-inline:var(--gutter);}
   .reel::-webkit-scrollbar{display:none;}
   .reel-card{
-    scroll-snap-align:start; flex:0 0 auto; width:172px; aspect-ratio:3/4; border-radius:var(--radius-m);
+    scroll-snap-align:start; flex:0 0 auto; width:344px; aspect-ratio:3/4; border-radius:var(--radius-m);
     position:relative; overflow:hidden; cursor:pointer; border:1px solid rgba(255,255,255,.2);
     transition:transform .18s ease;
   }
@@ -248,9 +248,11 @@
   .sh-actions{display:flex; align-items:center; gap:.7em; flex-wrap:wrap; flex:none;}
   .reel-nav-light button{width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--bg-raised); color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem;}
   .reel-nav-light button:hover{border-color:var(--forest); color:var(--forest);}
-  .reel .card{flex:0 0 auto; width:230px;}
-  .reel .review-card{flex:0 0 auto; width:190px;}
-  .reel .local-card{flex:0 0 auto; width:300px;}
+  .reel .card{flex:0 0 auto; width:345px;}
+  .reel .review-card{flex:0 0 auto; width:285px;}
+  .reel .local-card{flex:0 0 auto; width:330px;}
+  #places-reel.reel{max-width:calc(3 * 344px + 2 * 14px);}
+  #do-this-grid.reel{max-width:calc(3 * 345px + 2 * 14px);}
   .swipe-hint-row{display:none;}
 
   /* ---------- Chip (dùng chung: bộ lọc Tips cộng đồng) ---------- */
@@ -264,7 +266,7 @@
 
   /* ---------- Feel banner (minh hoạ + tiêu đề dưới hero) ---------- */
   .feel-banner{
-    display:flex; align-items:center; gap:var(--sp-4);
+    display:flex; align-items:flex-start; gap:var(--sp-4);
     background:var(--bg-raised); border:1px solid var(--line); border-radius:var(--radius-l);
     padding:var(--sp-4);
   }
@@ -276,6 +278,13 @@
     border-radius:var(--radius-m); background-color:#FBF7ED; border:1px solid var(--line);
     box-shadow:0 22px 50px -26px var(--shadow);
   }
+  .feel-pillars{display:grid; grid-template-columns:1fr 1fr; gap:.9em 1em; margin-top:var(--sp-4);}
+  .feel-pillar{display:flex; align-items:center; gap:.55em; font-size:.86rem; color:var(--ink-muted);}
+  .feel-pillar-icon{
+    width:30px; height:30px; border-radius:50%; background:var(--forest-tint); color:var(--forest);
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .feel-pillar-icon .icon{width:15px; height:15px;}
 
   /* ---------- Card grids ---------- */
   .grid{display:grid; gap:var(--sp-3);}
@@ -351,6 +360,7 @@
     font-family:var(--font-display); font-weight:600; font-size:1.2rem; background:var(--forest); color:var(--on-forest);
   }
   .avatar.sm{width:44px; height:44px; font-size:1rem;}
+  .avatar.card{width:84px; height:84px; border-radius:var(--radius-m); font-size:1.3rem;}
   .skill-bars{display:flex; flex-direction:column; gap:.3em; margin-top:.4em;}
   .skill-bar{display:grid; grid-template-columns:7.5em 1fr; align-items:center; gap:.6em; font-size:.78rem; color:var(--ink-muted);}
   .skill-bar .track{height:5px; background:var(--bg-sunken); border-radius:999px; overflow:hidden;}
@@ -375,20 +385,23 @@
   .site-popup-body h3{font-size:1.3rem; font-family:var(--font-display);}
   .site-popup-body p{color:var(--ink-muted); font-size:.95rem;}
 
-  /* quote callout */
-  .callout{
-    position:relative; overflow:hidden;
+  /* quote callout — bố cục 2 cột: chữ trái + ảnh trong khung cố định phải (ảnh nhỏ không bị phóng to/mờ) */
+  .callout-split{
+    display:flex; align-items:stretch; gap:0; overflow:hidden;
     background:var(--forest); color:var(--on-forest); border-radius:var(--radius-l);
-    min-height:320px; display:flex; align-items:flex-end;
+    box-shadow:0 22px 50px -26px var(--shadow);
   }
-  .callout-photo{position:absolute; inset:0; background-size:cover; background-position:center 30%; background-color:var(--forest);}
-  .callout-scrim{
-    position:absolute; inset:0;
-    background:linear-gradient(100deg, var(--forest-strong) 0%, rgba(12,21,38,.82) 34%, rgba(12,21,38,.32) 62%, rgba(12,21,38,.05) 82%);
+  .callout-split-text{
+    flex:0 0 auto; width:38%; min-width:260px;
+    padding:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-2); align-items:flex-start; justify-content:center;
   }
-  .callout-body{position:relative; z-index:1; padding:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-2); align-items:flex-start; max-width:34rem;}
-  .callout h2{font-size:clamp(1.7rem,3vw,2.5rem); max-width:20ch; font-style:italic; font-weight:560;}
-  .callout .btn-primary{background:var(--bg-raised); color:var(--forest-strong);}
+  .callout-split-text .eyebrow{color:var(--on-forest); opacity:.75;}
+  .callout-split-text h2{font-size:clamp(1.6rem,2.6vw,2.3rem); max-width:18ch; font-style:italic; font-weight:560;}
+  .callout-split-text .btn-primary{background:var(--bg-raised); color:var(--forest-strong);}
+  .callout-split-art{
+    flex:1 1 auto; min-width:0; aspect-ratio:4/3; background-size:cover; background-position:center 30%;
+    background-color:var(--forest-strong);
+  }
 
   /* ---------- Itinerary timeline ---------- */
   .day-cols{display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-4);}
@@ -645,20 +658,22 @@
     .form-grid{grid-template-columns:1fr;}
     section{padding-block:var(--sp-5);}
     .hero-cinematic{min-height:560px;}
-    .reel-card{width:140px;}
+    .reel-card{width:280px;}
     .reel-2row{display:grid; grid-auto-flow:column; grid-template-rows:repeat(2,minmax(0,1fr)); grid-auto-columns:min-content; gap:10px;}
-    .reel-2row .card{width:180px;}
-    .reel-2row .review-card{width:160px;}
-    .reel .local-card{width:260px;}
+    .reel-2row .card{width:270px;}
+    .reel-2row .review-card{width:240px;}
+    .reel .local-card{width:280px;}
+    #places-reel.reel, #do-this-grid.reel{max-width:none;}
     .swipe-hint-row{display:flex; justify-content:center; margin-top:.8em;}
     .swipe-hint{font-size:.78rem; color:var(--ink-muted); background:var(--bg-sunken); border:1px solid var(--line); border-radius:999px; padding:.5em 1.2em; cursor:pointer; font-family:inherit;}
     .sh-actions{gap:.5em;}
     .feel-banner{flex-direction:column; align-items:stretch; padding:var(--sp-3); gap:var(--sp-3);}
     .feel-banner-text{width:auto;}
     .feel-banner-art{aspect-ratio:16/11;}
-    .callout{min-height:380px; align-items:stretch;}
-    .callout-scrim{background:linear-gradient(0deg, var(--forest-strong) 0%, rgba(12,21,38,.86) 40%, rgba(12,21,38,.1) 78%);}
-    .callout-body{padding:var(--sp-3); max-width:none;}
+    .feel-pillars{grid-template-columns:1fr 1fr;}
+    .callout-split{flex-direction:column;}
+    .callout-split-text{width:auto;}
+    .callout-split-art{aspect-ratio:16/11;}
   }
   @media (max-width:460px){
     .grid-4, .grid-3, .grid-2{grid-template-columns:1fr;}
@@ -760,6 +775,12 @@
         <div class="feel-banner-text">
           <h2 id="sh-feel-title">Hôm nay bạn muốn gì?</h2>
           <p class="desc" id="sh-feel-desc">Không tìm theo địa danh. Tìm theo cảm xúc — cách Leisure khác một OTA.</p>
+          <div class="feel-pillars">
+            <div class="feel-pillar"><span class="feel-pillar-icon"><svg class="icon" width="15" height="15"><use href="#i-pin"/></svg></span><span>Gợi ý hành trình tự túc</span></div>
+            <div class="feel-pillar"><span class="feel-pillar-icon"><svg class="icon" width="15" height="15"><use href="#i-compass"/></svg></span><span>Trải nghiệm bản địa</span></div>
+            <div class="feel-pillar"><span class="feel-pillar-icon"><svg class="icon" width="15" height="15"><use href="#i-users"/></svg></span><span>Kết nối Local Talent</span></div>
+            <div class="feel-pillar"><span class="feel-pillar-icon"><svg class="icon" width="15" height="15"><use href="#i-star"/></svg></span><span>Đánh giá từ KOL/Cộng đồng</span></div>
+          </div>
         </div>
         <div class="feel-banner-art" id="feel-banner-art" role="img" aria-label="Minh hoạ Leisure.tips — bản đồ hành trình, gợi ý Local Talent và trải nghiệm nổi bật trên điện thoại"></div>
       </div>
@@ -811,14 +832,13 @@
     </section>
 
     <section class="wrap" id="find-local">
-      <div class="callout">
-        <div class="callout-photo" id="fl-photo" aria-hidden="true"></div>
-        <div class="callout-scrim" aria-hidden="true"></div>
-        <div class="callout-body">
-          <span class="eyebrow" style="color:var(--on-forest); opacity:.75;" id="fl-eyebrow">Local on demand</span>
+      <div class="callout-split">
+        <div class="callout-split-text">
+          <span class="eyebrow" id="fl-eyebrow">Local on demand</span>
           <h2 id="fl-title">Bạn tự đi. Họ chỉ xuất hiện khi bạn cần.</h2>
           <button class="btn btn-primary" data-nav="destinations" id="fl-cta">Tìm Local đồng hành</button>
         </div>
+        <div class="callout-split-art" id="fl-photo" role="img" aria-label="Local đồng hành cùng khách tại gánh hàng bản địa"></div>
       </div>
     </section>
 
@@ -1398,7 +1418,7 @@
           <div><label for="cf-fl-eyebrow">Dòng nhỏ phía trên</label><input id="cf-fl-eyebrow"></div>
           <div><label for="cf-fl-cta">Nút bấm</label><input id="cf-fl-cta"></div>
           <div class="full"><label for="cf-fl-title">Tiêu đề</label><input id="cf-fl-title"></div>
-          <div class="full"><label for="cf-fl-bg">Ảnh nền băng CTA <span class="hint">Không chọn thì giữ ảnh mặc định. Khuyến nghị: ảnh ngang 1600×900px trở lên, chủ thể (người/vật) nằm lệch phải vì bên trái sẽ có lớp phủ tối để chữ dễ đọc.</span></label><input type="file" id="cf-fl-bg" accept="image/*"></div>
+          <div class="full"><label for="cf-fl-bg">Ảnh minh hoạ bên phải <span class="hint">Không chọn thì giữ ảnh mặc định. Khuyến nghị: ảnh khổ vuông/ngang nhẹ (tỉ lệ ~4:3), tối thiểu 900×675px — ảnh nằm gọn trong khung cố định bên phải nên không bị phóng to/mờ như kiểu nền toàn chiều ngang.</span></label><input type="file" id="cf-fl-bg" accept="image/*"></div>
 
           <div class="full" style="border-top:1px dashed var(--line); padding-top:var(--sp-2); margin-top:.2em;"><label>Mục "Người thật. Review thật."</label></div>
           <div><label for="cf-reviews-title">Tiêu đề</label><input id="cf-reviews-title"></div>
@@ -2375,7 +2395,7 @@
   }
 
   function meetLocalCardHtml(l){
-    return '<div class="local-card">'+avatarHtml(l)+
+    return '<div class="local-card">'+avatarHtml(l, 'card')+
       '<div>'+
         '<div class="badge-row"><h4>'+esc(l.name)+'</h4><span class="tag">'+esc(l.place)+'</span><span class="demo-badge">Demo</span></div>'+
         '<p style="font-size:.9rem; color:var(--ink-muted); margin-top:.3em;">'+esc(l.emoji)+' '+esc(l.role)+' — "'+esc(l.bio)+'"</p>'+
