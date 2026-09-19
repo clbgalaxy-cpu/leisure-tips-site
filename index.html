@@ -228,6 +228,8 @@
   .reel-card .place{display:block; font-size:.66rem; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,.78); margin-bottom:.2em;}
   .reel-card .title{font-size:.86rem; font-weight:600; line-height:1.2;}
   .reel-card .art{position:absolute; inset:0;}
+  /* Reel đầu trang (hero) dùng khung nhỏ hơn destinations reel — cùng class .reel-card nhưng scope riêng theo #hero-reel để không che ảnh nền hero */
+  #hero-reel .reel-card{width:206px;}
 
   .hero-wave{position:absolute; left:0; right:0; bottom:-1px; z-index:1; width:100%; height:60px; display:block;}
 
@@ -368,12 +370,24 @@
 
   /* review cards */
   .review-card{border:1px solid var(--line); border-radius:var(--radius-m); background:var(--bg-raised); overflow:hidden; display:block; text-decoration:none; color:inherit; transition:border-color .2s, transform .2s;}
-  a.review-card:hover{border-color:var(--forest); transform:translateY(-2px);}
+  button.review-card{appearance:none; -webkit-appearance:none; padding:0; margin:0; font:inherit; text-align:left; cursor:pointer;}
+  a.review-card:hover, button.review-card:hover{border-color:var(--forest); transform:translateY(-2px);}
   .review-thumb{aspect-ratio:9/12; background:linear-gradient(155deg, var(--forest-tint), var(--bg-sunken)); position:relative; display:flex; align-items:flex-end; padding:var(--sp-2);}
-  .review-thumb .platform{font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; background:rgba(10,14,8,.55); color:#fff; padding:.3em .6em; border-radius:999px;}
+  .review-thumb .platform{position:relative; z-index:1; font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; background:rgba(10,14,8,.55); color:#fff; padding:.3em .6em; border-radius:999px;}
+  .review-play{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;}
+  .review-play-btn{width:44px; height:44px; border-radius:50%; background:rgba(6,10,7,.5); border:1.5px solid rgba(255,255,255,.8); color:#fff; display:flex; align-items:center; justify-content:center; transition:transform .18s ease, background .18s ease;}
+  .review-card:hover .review-play-btn{transform:scale(1.08); background:rgba(6,10,7,.72);}
   .review-body{padding:var(--sp-2) var(--sp-3) var(--sp-3); display:flex; flex-direction:column; gap:.4em;}
   .review-body .handle{font-weight:600; font-size:.9rem;}
   .review-body .caption{font-size:.85rem; color:var(--ink-muted);}
+
+  /* video lightbox cho review có link YouTube — xem trực tiếp trên site */
+  .review-lightbox{position:fixed; inset:0; z-index:60; background:rgba(4,7,5,.92); display:flex; align-items:center; justify-content:center; padding:var(--sp-3);}
+  .review-lightbox[hidden]{display:none;}
+  .rlb-card{position:relative; width:100%; max-width:34rem;}
+  .rlb-frame{width:100%; aspect-ratio:16/9; border-radius:var(--radius-m); overflow:hidden; background:#000; box-shadow:0 30px 80px rgba(0,0,0,.5);}
+  .rlb-frame iframe{width:100%; height:100%; border:0; display:block;}
+  .rlb-close{position:absolute; top:-14px; right:-14px; width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--bg-raised); color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:1;}
 
   /* site popup */
   .site-popup-overlay{position:fixed; inset:0; z-index:50; background:rgba(6,10,7,.55); display:flex; align-items:center; justify-content:center; padding:var(--sp-3);}
@@ -388,16 +402,14 @@
   /* quote callout — bố cục 2 cột: chữ trái + ảnh trong khung cố định phải (ảnh nhỏ không bị phóng to/mờ) */
   .callout-split{
     display:flex; align-items:stretch; gap:0; overflow:hidden;
-    background:var(--forest); color:var(--on-forest); border-radius:var(--radius-l);
+    background:var(--dawn-tint); color:var(--ink); border-radius:var(--radius-l);
     box-shadow:0 22px 50px -26px var(--shadow);
   }
   .callout-split-text{
     flex:0 0 auto; width:38%; min-width:260px;
     padding:var(--sp-5); display:flex; flex-direction:column; gap:var(--sp-2); align-items:flex-start; justify-content:center;
   }
-  .callout-split-text .eyebrow{color:var(--on-forest); opacity:.75;}
   .callout-split-text h2{font-size:clamp(1.6rem,2.6vw,2.3rem); max-width:18ch; font-style:italic; font-weight:560;}
-  .callout-split-text .btn-primary{background:var(--bg-raised); color:var(--forest-strong);}
   .callout-split-art{
     flex:1 1 auto; min-width:0; aspect-ratio:4/3; background-size:cover; background-position:center 30%;
     background-color:var(--forest-strong);
@@ -659,6 +671,7 @@
     section{padding-block:var(--sp-5);}
     .hero-cinematic{min-height:560px;}
     .reel-card{width:280px;}
+    #hero-reel .reel-card{width:168px;}
     .reel-2row{display:grid; grid-auto-flow:column; grid-template-rows:repeat(2,minmax(0,1fr)); grid-auto-columns:min-content; gap:10px;}
     .reel-2row .card{width:270px;}
     .reel-2row .review-card{width:240px;}
@@ -1143,6 +1156,13 @@
   </div>
 </div>
 
+<div id="review-lightbox" class="review-lightbox" hidden>
+  <div class="rlb-card">
+    <button type="button" class="rlb-close" id="rlb-close" aria-label="Đóng">✕</button>
+    <div class="rlb-frame"><iframe id="rlb-iframe" src="" title="Xem video review" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  </div>
+</div>
+
 <!-- ============ ADMIN ============ -->
 <div id="admin-root" hidden>
 
@@ -1372,6 +1392,7 @@
           <div><label for="adm-review-handle">Tên/handle người đăng *</label><input id="adm-review-handle" required placeholder="VD: @daydidi.vn"></div>
           <div class="full"><label for="adm-review-caption">Trích dẫn ngắn *</label><input id="adm-review-caption" required placeholder='VD: "Đi thử trải nghiệm hái trà ở Bảo Lộc"'></div>
           <div class="full"><label for="adm-review-link">Link bài đăng gốc *</label><input id="adm-review-link" type="url" required placeholder="https://…"></div>
+          <div class="full"><label for="adm-review-thumb">Ảnh thumbnail (tuỳ chọn) <span class="hint">Giúp khách nhận diện nội dung clip trước khi bấm xem. Không chọn thì giữ ảnh cũ (khi sửa) hoặc dùng nền màu mặc định theo nền tảng (khi tạo mới). Nếu link là YouTube, khách có thể bấm Play để xem ngay trên trang.</span></label><input type="file" id="adm-review-thumb" accept="image/*"></div>
           <div class="actions">
             <button type="submit" class="btn btn-primary btn-sm" id="adm-review-submit">Lưu review (Draft)</button>
             <button type="button" class="admin-btn" id="adm-review-cancel">Huỷ</button>
@@ -1860,7 +1881,7 @@
     };
   }
   function mapReviewRow(r){
-    return { id:r.id, platform:r.platform || 'Khác', handle:r.handle, caption:r.caption, link:r.link || '', status:r.status || 'draft' };
+    return { id:r.id, platform:r.platform || 'Khác', handle:r.handle, caption:r.caption, link:r.link || '', thumbUrl:r.thumb_url || null, status:r.status || 'draft' };
   }
   function mapPlaceRow(r){
     return {
@@ -2474,13 +2495,26 @@
     reader.readAsDataURL(file);
   }
 
+  function youTubeEmbedId(url){
+    if(!url) return null;
+    var m = String(url).match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : null;
+  }
   function reviewCardHtml(r){
     var plat = REVIEW_PLATFORMS[r.platform] || REVIEW_PLATFORMS['Khác'];
-    var inner = '<div class="review-thumb" style="background:linear-gradient(155deg, '+plat.tint+', var(--bg-sunken));"><span class="platform">'+esc(r.platform)+'</span></div>'+
+    var ytId = youTubeEmbedId(r.link);
+    var thumbStyle = r.thumbUrl
+      ? 'background-image:url(\''+esc(r.thumbUrl)+'\'); background-size:cover; background-position:center;'
+      : 'background:linear-gradient(155deg, '+plat.tint+', var(--bg-sunken));';
+    var playBtn = '<span class="review-play" aria-hidden="true"><span class="review-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="8,5 19,12 8,19"/></svg></span></span>';
+    var inner = '<div class="review-thumb" style="'+thumbStyle+'"><span class="platform">'+esc(r.platform)+'</span>'+playBtn+'</div>'+
       '<div class="review-body">'+
         '<div class="badge-row"><span class="handle">'+esc(r.handle)+'</span><span class="demo-badge">Demo</span></div>'+
         '<p class="caption">'+esc(r.caption)+'</p>'+
       '</div>';
+    if(ytId){
+      return '<button type="button" class="review-card" data-yt-play="'+esc(ytId)+'" data-yt-title="'+esc(r.caption)+'">'+inner+'</button>';
+    }
     if(r.link){ return '<a class="review-card" href="'+esc(r.link)+'" target="_blank" rel="noopener">'+inner+'</a>'; }
     return '<div class="review-card">'+inner+'</div>';
   }
@@ -3210,6 +3244,38 @@
   wireReelNav('meetlocal-grid', 'meetlocal-reel-prev', 'meetlocal-reel-next', 320);
   wireReelNav('reviews-grid', 'reviews-reel-prev', 'reviews-reel-next', 220);
 
+  function openReviewLightbox(ytId, title){
+    var el = document.getElementById('review-lightbox');
+    var frame = document.getElementById('rlb-iframe');
+    if(!el || !frame) return;
+    frame.src = 'https://www.youtube.com/embed/'+encodeURIComponent(ytId)+'?autoplay=1&rel=0';
+    frame.title = title || 'Xem video review';
+    el.hidden = false;
+  }
+  function closeReviewLightbox(){
+    var el = document.getElementById('review-lightbox');
+    var frame = document.getElementById('rlb-iframe');
+    if(!el) return;
+    el.hidden = true;
+    if(frame) frame.src = '';
+  }
+  (function(){
+    var grid = document.getElementById('reviews-grid');
+    if(grid) grid.addEventListener('click', function(e){
+      var btn = e.target.closest('[data-yt-play]');
+      if(!btn) return;
+      openReviewLightbox(btn.getAttribute('data-yt-play'), btn.getAttribute('data-yt-title'));
+    });
+    var closeBtn = document.getElementById('rlb-close');
+    if(closeBtn) closeBtn.addEventListener('click', closeReviewLightbox);
+    var overlay = document.getElementById('review-lightbox');
+    if(overlay) overlay.addEventListener('click', function(e){ if(e.target === overlay) closeReviewLightbox(); });
+    document.addEventListener('keydown', function(e){
+      var el = document.getElementById('review-lightbox');
+      if(el && !el.hidden && e.key === 'Escape') closeReviewLightbox();
+    });
+  })();
+
   var dothisSwipeHint = document.getElementById('dothis-swipe-hint');
   if(dothisSwipeHint) dothisSwipeHint.addEventListener('click', function(){
     var el = document.getElementById('do-this-grid');
@@ -3801,21 +3867,29 @@
         platform: document.getElementById('adm-review-platform').value || 'Khác',
         handle:handle, caption:caption, link:link
       };
-      var rev, existing = editingId ? REVIEWS.filter(function(r){ return r.id === editingId; })[0] : null;
-      if(existing){
-        rev = existing;
-        Object.assign(rev, fieldVals);
-      } else {
-        rev = Object.assign({ id:'rev' + Date.now(), status:'draft' }, fieldVals);
-        REVIEWS.push(rev);
-      }
-      admReviewForm.reset();
-      document.getElementById('adm-review-editing-id').value = '';
-      document.getElementById('adm-review-submit').textContent = 'Lưu review (Draft)';
-      admReviewForm.hidden = true;
-      renderAdminReviews();
-      flashToast('adm-review-toast');
-      sbUpsert('reviews', rev, 'reviews');
+      readImageAsDataURL(document.getElementById('adm-review-thumb'), 800, function(thumbDataUrl){
+      uploadImageAndResolve(thumbDataUrl, 'review-thumbs', function(finalThumb){
+        var rev, existing = editingId ? REVIEWS.filter(function(r){ return r.id === editingId; })[0] : null;
+        if(existing){
+          rev = existing;
+          Object.assign(rev, fieldVals);
+          if(finalThumb) rev.thumbUrl = finalThumb;
+        } else {
+          rev = Object.assign({ id:'rev' + Date.now(), status:'draft', thumbUrl: finalThumb || null }, fieldVals);
+          REVIEWS.push(rev);
+        }
+        admReviewForm.reset();
+        document.getElementById('adm-review-editing-id').value = '';
+        document.getElementById('adm-review-submit').textContent = 'Lưu review (Draft)';
+        admReviewForm.hidden = true;
+        renderAdminReviews();
+        flashToast('adm-review-toast');
+        sbUpsert('reviews', {
+          id:rev.id, platform:rev.platform, handle:rev.handle, caption:rev.caption,
+          link:rev.link, thumb_url:rev.thumbUrl || null, status:rev.status
+        }, 'reviews');
+      });
+      });
     });
   }
 
