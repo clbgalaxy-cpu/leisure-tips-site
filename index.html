@@ -96,6 +96,13 @@
     text-transform:uppercase; color:var(--clay); border:1px dashed var(--clay);
     border-radius:999px; padding:.28em .7em; white-space:nowrap;
   }
+  /* Local Talent nổi bật — chọn tay trong Admin → Locals, thay cho nhãn "Demo" cũ trên các ảnh hiển thị Local */
+  .star-badge{
+    display:inline-flex; align-items:center; gap:.3em; font-family:var(--font-body);
+    font-size:.66rem; font-weight:700; letter-spacing:.03em; white-space:nowrap;
+    color:var(--on-dawn); background:var(--dawn); border-radius:999px; padding:.28em .7em .28em .6em;
+  }
+  .star-badge svg{width:.85em; height:.85em; fill:currentColor;}
 
   /* ---------- Nav ---------- */
   .nav{
@@ -236,6 +243,9 @@
   .reel-card .art{position:absolute; inset:0;}
   /* Reel đầu trang (hero) dùng khung nhỏ hơn destinations reel — cùng class .reel-card nhưng scope riêng theo #hero-reel để không che ảnh nền hero */
   #hero-reel .reel-card{width:206px;}
+  /* Reel "Đi đâu đó khác một chút?" (Places) ngoài trang chủ: chữ tên điểm đến x2 kích thước — trước đây quá nhỏ trên ảnh */
+  #places-reel .reel-card .place{font-size:1.3rem;}
+  #places-reel .reel-card .title{font-size:1.7rem; line-height:1.15;}
 
   .hero-wave{position:absolute; left:0; right:0; bottom:-1px; z-index:1; width:100%; height:60px; display:block;}
 
@@ -324,16 +334,15 @@
     .places-grid .place-card .content p.hook{font-size:.72rem; -webkit-line-clamp:2; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden;}
   }
 
-  /* Trang "Trang chủ/Locals" (chọn điểm đến để tìm Local) — khung dày hơn, giảm ~50% so với bản grid-3 cũ */
-  #destinations-grid{grid-template-columns:repeat(6,1fr);}
-  @media (max-width:1180px){ #destinations-grid{grid-template-columns:repeat(5,1fr);} }
-  @media (max-width:900px){ #destinations-grid{grid-template-columns:repeat(4,1fr);} }
+  /* Trang "Trang chủ/Locals" (chọn điểm đến để tìm Local) — tăng lại +50% so với bản giảm 50% trước đó (Version 29 quá nhỏ) */
+  #destinations-grid{grid-template-columns:repeat(4,1fr);}
+  @media (max-width:1180px){ #destinations-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:900px){ #destinations-grid{grid-template-columns:repeat(3,1fr);} }
   @media (max-width:640px){
-    #destinations-grid{grid-template-columns:repeat(4,1fr); gap:.6em;}
-    #destinations-grid .place-card{padding:.55em;}
-    #destinations-grid .place-card h3{font-size:.78rem;}
-    #destinations-grid .place-card .field-tag{font-size:.55rem; padding:.15em .4em;}
-    #destinations-grid .place-card .content p.hook{display:none;}
+    #destinations-grid{grid-template-columns:repeat(2,1fr); gap:.7em;}
+    #destinations-grid .place-card{padding:.75em;}
+    #destinations-grid .place-card h3{font-size:1.05rem;}
+    #destinations-grid .place-card .field-tag{font-size:.68rem; padding:.2em .5em;}
   }
   .search-bar-wrap{position:relative; margin-bottom:var(--sp-3);}
   .search-bar-wrap .icon{position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--ink-muted); pointer-events:none;}
@@ -388,12 +397,29 @@
   .tag{font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--clay); background:var(--clay-tint); border-radius:999px; padding:.3em .7em;}
 
   /* local card (Local Talent — reel trang chủ): ảnh lớn trên đầu, giống bố cục card Trải nghiệm */
-  .local-card{display:flex; flex-direction:column; border:1px solid var(--line); border-radius:var(--radius-m); background:var(--bg-raised); overflow:hidden;}
+  .local-card{
+    display:flex; flex-direction:column; border:1px solid var(--line); border-radius:var(--radius-m);
+    background:var(--bg-raised); overflow:hidden; height:100%;
+    cursor:pointer; text-align:left; font-family:inherit; color:inherit; padding:0; margin:0;
+    transition:border-color .15s ease;
+  }
+  .local-card:hover{border-color:var(--forest);}
   .local-card .art{aspect-ratio:4/3; position:relative; background:var(--forest);}
   .local-card .art-emoji{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:2.6rem;}
-  .local-card-body{padding:var(--sp-2) var(--sp-3) var(--sp-3); display:flex; flex-direction:column; gap:.5em;}
-  .local-card-body .bio{font-size:.88rem; color:var(--ink-muted);}
-  .local-card-body .foot{display:flex; justify-content:space-between; align-items:center; gap:.6em; margin-top:.2em; padding-top:.6em; border-top:1px dashed var(--line); font-size:.85rem;}
+  .local-card-body{padding:var(--sp-2) var(--sp-3) var(--sp-3); display:flex; flex-direction:column; gap:.5em; flex:1;}
+  .local-card-body .bio{
+    font-size:.88rem; color:var(--ink-muted);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em;
+  }
+  /* Kỹ năng/Ngôn ngữ/Chi phí — tách riêng từng khối dọc, luôn neo ở đáy card (margin-top:auto)
+     để các Local hiển thị cân xứng nhau, không lệch theo độ dài đoạn bio phía trên */
+  .lc-fields{display:flex; flex-direction:column; gap:.5em; margin-top:auto;}
+  .lc-field{padding-top:.5em; border-top:1px dashed var(--line); font-size:.85rem;}
+  .lc-field-skills{display:flex; flex-direction:column; gap:.35em;}
+  .lc-field-lang, .lc-field-price{display:flex; justify-content:space-between; align-items:center; gap:.6em;}
+  .lc-label{font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-muted); white-space:nowrap;}
+  .lc-value{font-weight:600;}
+  .lc-field-price .lc-value{color:var(--forest);}
   .avatar{
     width:64px; height:64px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
     font-family:var(--font-display); font-weight:600; font-size:1.2rem; background:var(--forest); color:var(--on-forest);
@@ -402,6 +428,7 @@
   .avatar.card{width:84px; height:84px; border-radius:var(--radius-m); font-size:1.3rem;}
   .skill-bars{display:flex; flex-direction:column; gap:.3em; margin-top:.4em;}
   .skill-bar{display:grid; grid-template-columns:7.5em 1fr; align-items:center; gap:.6em; font-size:.78rem; color:var(--ink-muted);}
+  .skill-bar span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .skill-bar .track{height:5px; background:var(--bg-sunken); border-radius:999px; overflow:hidden;}
   .skill-bar .fill{height:100%; background:var(--forest); border-radius:999px;}
 
@@ -573,13 +600,15 @@
   .local-list-card{
     border:1px solid var(--line); border-radius:var(--radius-m); background:var(--bg-raised);
     padding:var(--sp-3); display:flex; flex-direction:column; gap:.8em; cursor:pointer; text-align:left;
-    width:100%; font-family:inherit; color:inherit;
+    width:100%; height:100%; font-family:inherit; color:inherit;
   }
   .local-list-card:hover{border-color:var(--forest);}
   .local-list-card .head{display:flex; gap:.8em; align-items:center;}
-  .local-list-card .bio{font-size:.88rem; color:var(--ink-muted);}
+  .local-list-card .bio{
+    font-size:.88rem; color:var(--ink-muted);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em;
+  }
   .local-list-card .skills-inline{display:flex; gap:.4em; flex-wrap:wrap;}
-  .local-list-card .foot{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:.6em; border-top:1px dashed var(--line); font-size:.85rem;}
   .empty-state{border:1px dashed var(--line); border-radius:var(--radius-m); padding:var(--sp-4); text-align:center; color:var(--ink-muted); display:flex; flex-direction:column; gap:var(--sp-2); align-items:center;}
 
   .lp-hero{display:flex; gap:var(--sp-3); align-items:flex-start; padding-block:var(--sp-4) var(--sp-2); flex-wrap:wrap;}
@@ -1054,6 +1083,14 @@
       </div>
     </section>
 
+    <section class="wrap" id="xp-reviews-section" hidden>
+      <div class="section-head">
+        <h2 id="xp-reviews-heading">Review về trải nghiệm này</h2>
+        <p class="desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
+      </div>
+      <div class="grid grid-3" id="xp-reviews-grid"></div>
+    </section>
+
     <section class="wrap">
       <div class="section-head">
         <h2>Trải nghiệm khác</h2>
@@ -1120,7 +1157,7 @@
     <section class="lp-hero wrap">
       <div class="avatar" id="lp-avatar" style="background:var(--dawn); color:var(--on-dawn);">?</div>
       <div>
-        <div class="badge-row"><h1 id="lp-name"></h1><span class="demo-badge">Demo — chưa xác thực</span></div>
+        <div class="badge-row"><h1 id="lp-name"></h1><span id="lp-featured-badge"></span></div>
         <div class="badge-row" style="margin-top:.3em;"><span class="tag" id="lp-role"></span><span class="field-tag" id="lp-place"></span></div>
         <p class="lp-bio" id="lp-bio"></p>
         <div class="lp-facts">
@@ -1132,6 +1169,13 @@
     <section class="wrap tight">
       <div class="section-head"><h2>Kỹ năng</h2></div>
       <div class="skill-bars" id="lp-skills" style="max-width:28rem;"></div>
+    </section>
+    <section class="wrap" id="lp-reviews-section" hidden>
+      <div class="section-head">
+        <h2 id="lp-reviews-heading">Review về Local này</h2>
+        <p class="desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
+      </div>
+      <div class="grid grid-3" id="lp-reviews-grid"></div>
     </section>
     <hr class="rule wrap">
     <section class="wrap" id="lp-book">
@@ -1401,6 +1445,7 @@
           <div><label for="adm-local-photo">Ảnh đại diện <span class="hint">Không chọn thì dùng emoji làm avatar</span></label><input type="file" id="adm-local-photo" accept="image/*"></div>
           <div class="full"><label for="adm-local-bio">Giới thiệu ngắn *</label><input id="adm-local-bio" required placeholder="1-2 câu về kinh nghiệm, phong cách dẫn khách"></div>
           <div class="full"><label for="adm-local-skills">Kỹ năng <span class="hint">Mỗi dòng: Tên - mức độ % (VD: Trà & Cà phê - 100)</span></label><textarea id="adm-local-skills" placeholder="Trà & Cà phê - 100&#10;Nấu ăn địa phương - 70"></textarea></div>
+          <div class="full"><label style="display:flex; align-items:center; gap:.5em; margin-bottom:0;"><input type="checkbox" id="adm-local-featured" style="width:auto;"> ⭐ Đánh dấu <strong>Local Talent nổi bật</strong> <span class="hint">Khách phản hồi tích cực, được nhiều người chọn nhất — hiện huy hiệu ⭐ Local Talent thay cho nhãn "Demo" trên các ảnh hiển thị Local này</span></label></div>
           <div class="actions">
             <button type="submit" class="btn btn-primary btn-sm" id="adm-local-submit">Lưu Local (Draft)</button>
             <button type="button" class="admin-btn" id="adm-local-cancel">Huỷ</button>
@@ -1458,6 +1503,8 @@
           <div><label for="adm-review-handle">Tên/handle người đăng *</label><input id="adm-review-handle" required placeholder="VD: @daydidi.vn"></div>
           <div><label for="adm-review-place">Gán theo điểm đến <span class="hint">Để review xuất hiện trong trang thông tin điểm đến đó</span></label><select id="adm-review-place"><option value="">— Không gán —</option></select></div>
           <div><label for="adm-review-local">Gán theo Local <span class="hint">Tuỳ chọn — nếu review nhắc tới một Local cụ thể</span></label><select id="adm-review-local"><option value="">— Không gán —</option></select></div>
+          <div><label for="adm-review-experience">Gán theo Trải nghiệm <span class="hint">Tuỳ chọn — để review xuất hiện trong trang chi tiết trải nghiệm đó</span></label><select id="adm-review-experience"><option value="">— Không gán —</option></select></div>
+          <div><label style="display:flex; align-items:center; gap:.5em; margin-bottom:0; margin-top:1.9em;"><input type="checkbox" id="adm-review-showhome" style="width:auto;" checked> Hiển thị ở trang chủ <span class="hint">Mục "Người thật. Review thật."</span></label></div>
           <div class="full"><label for="adm-review-caption">Trích dẫn ngắn *</label><input id="adm-review-caption" required placeholder='VD: "Đi thử trải nghiệm hái trà ở Bảo Lộc"'></div>
           <div class="full"><label for="adm-review-link">Link bài đăng gốc *</label><input id="adm-review-link" type="url" required placeholder="https://…"></div>
           <div class="full"><label for="adm-review-thumb">Ảnh thumbnail (tuỳ chọn) <span class="hint">Giúp khách nhận diện nội dung clip trước khi bấm xem. Không chọn thì giữ ảnh cũ (khi sửa) hoặc dùng nền màu mặc định theo nền tảng (khi tạo mới). Nếu link là YouTube, khách có thể bấm Play để xem ngay trên trang.</span></label><input type="file" id="adm-review-thumb" accept="image/*"></div>
@@ -1698,7 +1745,7 @@
     { id:'co-tam', name:'Cô Tâm', place:'Bảo Lộc', role:'Trà & Cà phê Expert', emoji:'☕',
       bio:'15 năm trồng trà, biết từng đồi trà quanh Bảo Lộc như lòng bàn tay. Vừa hái vừa kể chuyện, không vội.',
       skills:[{label:'Trà & Cà phê',lvl:100},{label:'Nấu ăn địa phương',lvl:70}],
-      lang:'Tiếng Việt', price:'300K', priceUnit:'buổi', matchSkill:'Trà & Cà phê Expert' },
+      lang:'Tiếng Việt', price:'300K', priceUnit:'buổi', matchSkill:'Trà & Cà phê Expert', featured:true },
     { id:'anh-huy', name:'Anh Huy', place:'Bảo Lộc', role:'Barista & Coffee Guide', emoji:'☕',
       bio:'Cựu barista Sài Gòn về quê mở xưởng rang nhỏ, mê kể chuyện cà phê hơn là bán cà phê.',
       skills:[{label:'Cà phê',lvl:100},{label:'Tiếng Anh',lvl:60}],
@@ -1710,7 +1757,7 @@
     { id:'anh-hung', name:'Anh Hùng', place:'Phú Quý', role:'Fishing Expert', emoji:'🎣',
       bio:'Ngư dân đời thứ ba, quen từng luồng cá quanh đảo. Ra khơi lúc trời còn tối, về là có bữa trưa.',
       skills:[{label:'Câu cá',lvl:100},{label:'Lặn biển',lvl:60}],
-      lang:'Tiếng Việt', price:'400K', priceUnit:'buổi', matchSkill:'Fishing Expert' },
+      lang:'Tiếng Việt', price:'400K', priceUnit:'buổi', matchSkill:'Fishing Expert', featured:true },
     { id:'chu-tu', name:'Chú Tư', place:'Phú Quý', role:'Fishing & Boat', emoji:'🎣',
       bio:'Chủ thuyền thúng, chuyên đưa khách ra rạn san hô gần bờ, phù hợp cả người mới đi biển lần đầu.',
       skills:[{label:'Câu cá',lvl:90},{label:'Chèo thuyền thúng',lvl:100}],
@@ -1718,7 +1765,7 @@
     { id:'a-sen', name:'A Sen', place:'Măng Đen', role:'Trekking & Local Fixer', emoji:'🧭',
       bio:'Người bản địa, thuộc từng lối mòn trong rừng thông. Dẫn khách đi lúc trời còn tối để kịp bình minh.',
       skills:[{label:'Trekking',lvl:100},{label:'Kiến thức rừng',lvl:95}],
-      lang:'Tiếng Việt', price:'320K', priceUnit:'buổi', matchSkill:'Local Fixer & Trekking' },
+      lang:'Tiếng Việt', price:'320K', priceUnit:'buổi', matchSkill:'Local Fixer & Trekking', featured:true },
     { id:'co-lan', name:'Cô Lan', place:'Đa điểm đến', role:'Local Host', emoji:'🍚',
       bio:'Mở bếp nhà đãi khách phương xa, mỗi bữa một câu chuyện khác nhau, không có hai bữa nào giống nhau.',
       skills:[{label:'Nấu ăn địa phương',lvl:100}],
@@ -1938,6 +1985,7 @@
       photo:r.photo_url || null, bio:r.bio || '',
       skills:Array.isArray(r.skills) ? r.skills : [],
       lang:r.lang || 'Tiếng Việt', price:r.price || '', priceUnit:r.price_unit || 'buổi', matchSkill:r.match_skill || '',
+      featured:!!r.featured,
       status:r.status || 'draft'
     };
   }
@@ -1949,7 +1997,7 @@
     };
   }
   function mapReviewRow(r){
-    return { id:r.id, platform:r.platform || 'Khác', handle:r.handle, caption:r.caption, link:r.link || '', thumbUrl:r.thumb_url || null, place:r.place || '', localId:r.local_id || '', status:r.status || 'draft' };
+    return { id:r.id, platform:r.platform || 'Khác', handle:r.handle, caption:r.caption, link:r.link || '', thumbUrl:r.thumb_url || null, place:r.place || '', localId:r.local_id || '', experienceId:r.experience_id || '', showHome:r.show_home !== false, status:r.status || 'draft' };
   }
   function mapPlaceRow(r){
     return {
@@ -2290,7 +2338,7 @@
     if(!el) return;
     var rows = LOCALS.map(function(l){
       var inMeetLocal = MEETLOCAL_ORDER.indexOf(l.id) > -1;
-      return '<tr><td><strong>'+esc(l.name)+'</strong> <span class="demo-badge" style="padding:.1em .5em;">Demo</span></td><td>'+esc(l.role)+'</td><td>'+esc(l.place)+'</td><td class="num">'+esc(l.price)+'/'+esc(l.priceUnit || 'buổi')+'</td>'+
+      return '<tr><td><strong>'+esc(l.name)+'</strong> '+(l.featured ? '<span class="star-badge" style="padding:.1em .5em;">★ Local Talent</span>' : '<span class="demo-badge" style="padding:.1em .5em;">Demo</span>')+'</td><td>'+esc(l.role)+'</td><td>'+esc(l.place)+'</td><td class="num">'+esc(l.price)+'/'+esc(l.priceUnit || 'buổi')+'</td>'+
         '<td><button type="button" class="toggle-pill'+(inMeetLocal?' is-on':'')+'" data-curate-toggle="meetlocal:'+l.id+'">'+(inMeetLocal?'✓ Local Talent':'+ Local Talent')+'</button></td>'+
         '<td><span class="status-pill '+l.status+'">'+(l.status==='draft'?'Đang ẩn':'Hiển thị')+'</span></td>'+
         '<td style="display:flex; gap:.4em; flex-wrap:wrap;"><button type="button" class="admin-btn" data-local-edit="'+l.id+'">Sửa</button>'+statusToggleBtn('local', l.id, l.status)+'</td></tr>';
@@ -2343,15 +2391,16 @@
     var el = document.getElementById('adm-table-reviews');
     if(!el) return;
     var rows = REVIEWS.map(function(r){
-      var assign = [r.place ? esc(r.place) : '', r.localId ? esc(localNameById(r.localId)) : ''].filter(Boolean).join(' · ') || '<span style="color:var(--ink-muted);">— chưa gán —</span>';
+      var assign = [r.place ? esc(r.place) : '', r.localId ? esc(localNameById(r.localId)) : '', r.experienceId ? esc(experienceTitleById(r.experienceId)) : ''].filter(Boolean).join(' · ') || '<span style="color:var(--ink-muted);">— chưa gán —</span>';
       return '<tr><td><strong>'+esc(r.handle)+'</strong><div style="font-size:.8rem;color:var(--ink-muted);max-width:20rem;">'+esc(r.caption)+'</div></td>'+
         '<td>'+esc(r.platform)+'</td>'+
         '<td style="font-size:.85rem;">'+assign+'</td>'+
+        '<td style="font-size:.85rem;">'+(r.showHome ? '✓ Có' : '— Không')+'</td>'+
         '<td><input type="url" class="admin-link-input" placeholder="Dán link bài đăng thật…" data-review-link="'+r.id+'" value="'+esc(r.link)+'"></td>'+
         '<td><span class="status-pill '+r.status+'">'+(r.status==='draft'?'Đang ẩn':'Hiển thị')+'</span></td>'+
         '<td style="display:flex; gap:.4em; flex-wrap:wrap;"><button type="button" class="admin-btn" data-review-edit="'+r.id+'">Sửa</button>'+statusToggleBtn('review', r.id, r.status)+'</td></tr>';
     }).join('');
-    el.innerHTML = '<thead><tr><th>Review</th><th>Nền tảng</th><th>Gán</th><th>Link nguồn</th><th>Trạng thái</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
+    el.innerHTML = '<thead><tr><th>Review</th><th>Nền tảng</th><th>Gán</th><th>Trang chủ</th><th>Link nguồn</th><th>Trạng thái</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
   }
 
   function leadRowHtml(l){
@@ -2474,14 +2523,28 @@
     }).join('');
   }
 
+  function featuredBadgeHtml(l){
+    return l.featured ? '<span class="star-badge">★ Local Talent</span>' : '';
+  }
+
+  // Khối Kỹ năng/Ngôn ngữ/Chi phí tách riêng dọc xuống, gán ở cuối card (margin-top:auto) —
+  // để phần này luôn thẳng hàng giữa các Local dù đoạn bio dài ngắn khác nhau.
+  function localFieldsHtml(l, skillsInnerHtml){
+    return '<div class="lc-fields">'+
+      (skillsInnerHtml ? '<div class="lc-field lc-field-skills"><span class="lc-label">Kỹ năng</span>'+skillsInnerHtml+'</div>' : '')+
+      '<div class="lc-field lc-field-lang"><span class="lc-label">Ngôn ngữ</span><span class="lc-value">🗣 '+esc(l.lang)+'</span></div>'+
+      '<div class="lc-field lc-field-price"><span class="lc-label">Chi phí</span><span class="lc-value price num">Từ '+esc(l.price)+'/'+esc(l.priceUnit || 'buổi')+'</span></div>'+
+    '</div>';
+  }
+
   function localCardHtml(l){
+    var skillsHtml = (l.skills && l.skills.length) ? '<div class="skills-inline">'+l.skills.map(function(s){ return '<span class="tag">'+esc(s.label)+'</span>'; }).join('')+'</div>' : '';
     return '<button class="local-list-card" data-local="'+l.id+'">'+
       '<div class="head">'+avatarHtml(l, 'sm')+
-        '<div><div class="badge-row"><h4 style="font-size:1.02rem;">'+esc(l.name)+'</h4><span class="demo-badge">Demo</span></div>'+
+        '<div><div class="badge-row"><h4 style="font-size:1.02rem;">'+esc(l.name)+'</h4>'+featuredBadgeHtml(l)+'</div>'+
         '<span class="tag">'+esc(l.role)+'</span></div></div>'+
       '<p class="bio">'+esc(l.bio)+'</p>'+
-      '<div class="skills-inline">'+l.skills.map(function(s){ return '<span class="tag">'+esc(s.label)+'</span>'; }).join('')+'</div>'+
-      '<div class="foot"><span>🗣 '+esc(l.lang)+'</span><span class="price num">Từ '+esc(l.price)+'/'+esc(l.priceUnit || 'buổi')+'</span></div>'+
+      localFieldsHtml(l, skillsHtml)+
     '</button>';
   }
 
@@ -2490,15 +2553,15 @@
   }
 
   function meetLocalCardHtml(l){
-    return '<div class="local-card">'+
+    var skillsHtml = (l.skills && l.skills.length) ? '<div class="skill-bars">'+l.skills.map(function(s){ return '<div class="skill-bar"><span>'+esc(s.label)+'</span><div class="track"><div class="fill" style="width:'+s.lvl+'%;"></div></div></div>'; }).join('')+'</div>' : '';
+    return '<button type="button" class="local-card" data-local="'+l.id+'">'+
       '<div class="art" style="'+localArtStyle(l)+'">'+(l.photo ? '' : '<span class="art-emoji">'+esc(l.emoji)+'</span>')+'</div>'+
       '<div class="local-card-body">'+
-        '<div class="badge-row"><h4>'+esc(l.name)+'</h4><span class="tag">'+esc(l.place)+'</span><span class="demo-badge">Demo</span></div>'+
+        '<div class="badge-row"><h4>'+esc(l.name)+'</h4><span class="tag">'+esc(l.place)+'</span>'+featuredBadgeHtml(l)+'</div>'+
         '<p class="bio">'+esc(l.emoji)+' '+esc(l.role)+' — "'+esc(l.bio)+'"</p>'+
-        (l.skills && l.skills.length ? '<div class="skill-bars">'+l.skills.map(function(s){ return '<div class="skill-bar"><span>'+esc(s.label)+'</span><div class="track"><div class="fill" style="width:'+s.lvl+'%;"></div></div></div>'; }).join('')+'</div>' : '')+
-        '<div class="foot"><span>🗣 '+esc(l.lang)+'</span><span class="price num">Từ '+esc(l.price)+'/'+esc(l.priceUnit || 'buổi')+'</span></div>'+
+        localFieldsHtml(l, skillsHtml)+
       '</div>'+
-    '</div>';
+    '</button>';
   }
 
   function renderMeetLocal(){
@@ -2599,7 +2662,7 @@
   function renderReviews(){
     var el = document.getElementById('reviews-grid');
     if(!el) return;
-    var pub = REVIEWS.filter(function(r){ return r.status !== 'draft'; });
+    var pub = REVIEWS.filter(function(r){ return r.status !== 'draft' && r.showHome !== false; });
     el.innerHTML = pub.length ? pub.map(reviewCardHtml).join('') : '<p style="color:var(--ink-muted);">Chưa có review nào được đăng.</p>';
   }
 
@@ -2664,10 +2727,21 @@
         LOCALS.map(function(l){ return '<option value="'+esc(l.id)+'">'+esc(l.name)+' — '+esc(l.place)+'</option>'; }).join('');
       revLocalSel.value = curLocal;
     }
+    var revExpSel = document.getElementById('adm-review-experience');
+    if(revExpSel){
+      var curExp = revExpSel.value;
+      revExpSel.innerHTML = '<option value="">— Không gán —</option>' +
+        Object.keys(EXPERIENCES).map(function(k){ return '<option value="'+esc(k)+'">'+esc(EXPERIENCES[k].title)+' — '+esc(EXPERIENCES[k].place)+'</option>'; }).join('');
+      revExpSel.value = curExp;
+    }
   }
   function localNameById(id){
     var l = LOCALS.filter(function(x){ return x.id === id; })[0];
     return l ? l.name : '';
+  }
+  function experienceTitleById(id){
+    var x = EXPERIENCES[id];
+    return x ? x.title : '';
   }
 
   var FOOTER_NAV_KEYS = ['home','places','tips','destinations','locals','about','contact','find-local'];
@@ -2760,6 +2834,17 @@
     }
     var related = Object.keys(EXPERIENCES).filter(function(k){ return k !== id && isPublished(k); }).slice(0,3);
     document.getElementById('xp-related-grid').innerHTML = related.map(gridCard).join('');
+    var xpMatchedReviews = REVIEWS.filter(function(r){ return r.status !== 'draft' && r.experienceId === id; });
+    var xpReviewsSection = document.getElementById('xp-reviews-section');
+    document.getElementById('xp-reviews-heading').textContent = 'Review về '+x.title;
+    var xpReviewsGrid = document.getElementById('xp-reviews-grid');
+    if(xpMatchedReviews.length){
+      xpReviewsSection.hidden = false;
+      xpReviewsGrid.innerHTML = xpMatchedReviews.map(reviewCardHtml).join('');
+    } else {
+      xpReviewsSection.hidden = true;
+      xpReviewsGrid.innerHTML = '';
+    }
     go('experience', {id:id});
   }
 
@@ -2793,17 +2878,28 @@
     });
     return list;
   }
+  // Ảnh nền cho card điểm đến trên trang "Trang chủ/Locals" — lấy từ ảnh thật của 1 trải nghiệm
+  // đã công bố cùng tên địa điểm đó (đã cài sẵn image_url trong Admin → Trải nghiệm), không cần cấu hình thêm.
+  function destinationBgImage(place){
+    var matchKey = Object.keys(EXPERIENCES).filter(function(k){
+      var x = EXPERIENCES[k];
+      return isPublished(k) && x.place === place && x.image;
+    })[0];
+    return matchKey ? EXPERIENCES[matchKey].image : null;
+  }
   function destinationCardHtml(place, i){
     var n = localsCountByPlace(place);
-    var hook = PLACE_HOOK[place] || 'Gặp người bản địa, nghe chuyện thật.';
     var art = DEST_ART[i % DEST_ART.length];
+    var bgImg = destinationBgImage(place);
+    var artStyle = bgImg
+      ? 'background-image:url(\''+esc(bgImg)+'\'); background-size:cover; background-position:center;'
+      : 'background:'+art+';';
     return '<button class="place-card" data-place="'+esc(place)+'">'+
-      '<div class="art" style="background:'+art+';"></div>'+
+      '<div class="art" style="'+artStyle+'"></div>'+
       '<div class="scrim"></div>'+
       '<div class="content">'+
         '<span class="field-tag" style="align-self:flex-start; background:rgba(10,14,8,.4); border-color:rgba(255,255,255,.4); color:var(--on-forest);">'+n+' Local</span>'+
         '<h3>'+esc(place)+'</h3>'+
-        '<p class="hook">'+esc(hook)+'</p>'+
       '</div>'+
     '</button>';
   }
@@ -3072,12 +3168,24 @@
       lpAv.style.backgroundImage = '';
     }
     document.getElementById('lp-name').textContent = l.name;
+    document.getElementById('lp-featured-badge').innerHTML = featuredBadgeHtml(l);
     document.getElementById('lp-role').textContent = l.role;
     document.getElementById('lp-place').innerHTML = '📍 <b>'+esc(l.place)+'</b>';
     document.getElementById('lp-bio').textContent = l.bio;
     document.getElementById('lp-lang').textContent = l.lang;
     document.getElementById('lp-price').textContent = l.price + '/' + (l.priceUnit || 'buổi');
     document.getElementById('lp-skills').innerHTML = skillBarsHtml(l.skills);
+    var lpMatchedReviews = REVIEWS.filter(function(r){ return r.status !== 'draft' && r.localId === l.id; });
+    var lpReviewsSection = document.getElementById('lp-reviews-section');
+    document.getElementById('lp-reviews-heading').textContent = 'Review về '+l.name;
+    var lpReviewsGrid = document.getElementById('lp-reviews-grid');
+    if(lpMatchedReviews.length){
+      lpReviewsSection.hidden = false;
+      lpReviewsGrid.innerHTML = lpMatchedReviews.map(reviewCardHtml).join('');
+    } else {
+      lpReviewsSection.hidden = true;
+      lpReviewsGrid.innerHTML = '';
+    }
     document.getElementById('lp-book-heading').textContent = 'Đặt lịch với '+l.name;
     var toast = document.getElementById('lp-toast');
     toast.textContent = 'Đã gửi yêu cầu — '+l.name+' sẽ chủ động liên hệ qua Zalo/điện thoại (demo).';
@@ -3890,7 +3998,8 @@
           lang: document.getElementById('adm-local-lang').value.trim() || 'Tiếng Việt',
           price: document.getElementById('adm-local-price').value.trim() || 'Liên hệ',
           priceUnit: document.getElementById('adm-local-price-unit').value || 'buổi',
-          matchSkill: document.getElementById('adm-local-matchskill').value.trim() || role
+          matchSkill: document.getElementById('adm-local-matchskill').value.trim() || role,
+          featured: document.getElementById('adm-local-featured').checked
         };
         var existing = editingId ? LOCALS.filter(function(l){ return l.id === editingId; })[0] : null;
         if(existing){
@@ -3909,12 +4018,14 @@
         document.getElementById('adm-local-emoji').value = '🧭';
         document.getElementById('adm-local-lang').value = 'Tiếng Việt';
         document.getElementById('adm-local-price-unit').value = 'buổi';
+        document.getElementById('adm-local-featured').checked = false;
         admLocalForm.hidden = true;
         renderAdminLocals();
+        renderMeetLocal();
         flashToast('adm-local-toast');
         sbUpsert('locals', {
           id:loc.id, name:loc.name, place:loc.place, role:loc.role, emoji:loc.emoji, photo_url:loc.photo,
-          bio:loc.bio, skills:loc.skills, lang:loc.lang, price:loc.price, price_unit:loc.priceUnit, match_skill:loc.matchSkill, status:loc.status
+          bio:loc.bio, skills:loc.skills, lang:loc.lang, price:loc.price, price_unit:loc.priceUnit, match_skill:loc.matchSkill, featured:loc.featured, status:loc.status
         }, 'locals');
       });
       });
@@ -3937,6 +4048,7 @@
     document.getElementById('adm-local-price-unit').value = loc.priceUnit || 'buổi';
     document.getElementById('adm-local-bio').value = loc.bio || '';
     document.getElementById('adm-local-skills').value = joinSkills(loc.skills);
+    document.getElementById('adm-local-featured').checked = !!loc.featured;
     document.getElementById('adm-local-submit').textContent = 'Lưu thay đổi';
     var form = document.getElementById('adm-local-form');
     form.hidden = false;
@@ -4018,7 +4130,9 @@
         platform: document.getElementById('adm-review-platform').value || 'Khác',
         handle:handle, caption:caption, link:link,
         place: document.getElementById('adm-review-place').value || '',
-        localId: document.getElementById('adm-review-local').value || ''
+        localId: document.getElementById('adm-review-local').value || '',
+        experienceId: document.getElementById('adm-review-experience').value || '',
+        showHome: document.getElementById('adm-review-showhome').checked
       };
       readImageAsDataURL(document.getElementById('adm-review-thumb'), 800, function(thumbDataUrl){
       uploadImageAndResolve(thumbDataUrl, 'review-thumbs', function(finalThumb){
@@ -4040,7 +4154,8 @@
         flashToast('adm-review-toast');
         sbUpsert('reviews', {
           id:rev.id, platform:rev.platform, handle:rev.handle, caption:rev.caption,
-          link:rev.link, thumb_url:rev.thumbUrl || null, place:rev.place || null, local_id:rev.localId || null, status:rev.status
+          link:rev.link, thumb_url:rev.thumbUrl || null, place:rev.place || null, local_id:rev.localId || null,
+          experience_id:rev.experienceId || null, show_home:rev.showHome, status:rev.status
         }, 'reviews');
       });
       });
@@ -4059,6 +4174,8 @@
     document.getElementById('adm-review-link').value = rev.link || '';
     document.getElementById('adm-review-place').value = rev.place || '';
     document.getElementById('adm-review-local').value = rev.localId || '';
+    document.getElementById('adm-review-experience').value = rev.experienceId || '';
+    document.getElementById('adm-review-showhome').checked = rev.showHome !== false;
     document.getElementById('adm-review-submit').textContent = 'Lưu thay đổi';
     var form = document.getElementById('adm-review-form');
     form.hidden = false;
