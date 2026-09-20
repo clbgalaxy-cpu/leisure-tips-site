@@ -282,6 +282,18 @@
   .chip:hover{border-color:var(--forest); background:var(--forest-tint);}
   button.chip{font-family:inherit; cursor:pointer;}
 
+  /* ---------- Version 32: chọn địa điểm trước, đứng trên bộ lọc chuyên mục Tips ---------- */
+  .tips-place-select-wrap{display:flex; align-items:center; gap:.7em; margin-bottom:var(--sp-2); flex-wrap:wrap;}
+  .tips-place-select-wrap label{font-size:.85rem; font-weight:600; color:var(--ink-muted); white-space:nowrap;}
+  .tips-place-select-wrap select{
+    border:1px solid var(--line); border-radius:999px; padding:.6em 2.2em .6em 1.1em; background:var(--bg-raised);
+    font-family:inherit; font-size:.9rem; color:var(--ink); cursor:pointer;
+    appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%23767669' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat; background-position:right 1em center;
+  }
+  .tips-place-select-wrap select:hover{border-color:var(--forest);}
+
   /* ---------- Feel banner (minh hoạ + tiêu đề dưới hero) ---------- */
   .feel-banner{
     display:flex; align-items:flex-start; gap:var(--sp-4);
@@ -323,26 +335,16 @@
   .place-card:disabled, .place-card.is-disabled{cursor:not-allowed;}
   .place-card:not(:disabled):hover{outline:2px solid var(--dawn); outline-offset:-2px;}
   .reel.reel-flush{margin-inline:0; padding-inline:0;}
-  .places-grid{grid-template-columns:repeat(5,1fr);}
-  @media (max-width:1180px){ .places-grid{grid-template-columns:repeat(4,1fr);} }
-  @media (max-width:900px){ .places-grid{grid-template-columns:repeat(3,1fr);} }
-  /* Khung điểm đến ngoài trang chủ trên mobile: 3 cột thay vì 2 — mỗi khung nhỏ hơn ~30% để bớt cảm giác "to, thiếu khoa học" */
+  /* Version 32: trang "Trang chủ/Places" giờ dùng chung đúng 1 bộ khung/size/font với trang "Trang chủ/Locals"
+     (#destinations-grid) cho nhất quán toàn site — gộp chung selector thay vì định nghĩa riêng 2 lần. */
+  .places-grid, #destinations-grid{grid-template-columns:repeat(4,1fr);}
+  @media (max-width:1180px){ .places-grid, #destinations-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:900px){ .places-grid, #destinations-grid{grid-template-columns:repeat(3,1fr);} }
   @media (max-width:640px){
-    .places-grid{grid-template-columns:repeat(3,1fr); gap:var(--sp-2);}
-    .places-grid .place-card{padding:var(--sp-2);}
-    .places-grid .place-card h3{font-size:1rem;}
-    .places-grid .place-card .content p.hook{font-size:.72rem; -webkit-line-clamp:2; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden;}
-  }
-
-  /* Trang "Trang chủ/Locals" (chọn điểm đến để tìm Local) — tăng lại +50% so với bản giảm 50% trước đó (Version 29 quá nhỏ) */
-  #destinations-grid{grid-template-columns:repeat(4,1fr);}
-  @media (max-width:1180px){ #destinations-grid{grid-template-columns:repeat(3,1fr);} }
-  @media (max-width:900px){ #destinations-grid{grid-template-columns:repeat(3,1fr);} }
-  @media (max-width:640px){
-    #destinations-grid{grid-template-columns:repeat(2,1fr); gap:.7em;}
-    #destinations-grid .place-card{padding:.75em;}
-    #destinations-grid .place-card h3{font-size:1.05rem;}
-    #destinations-grid .place-card .field-tag{font-size:.68rem; padding:.2em .5em;}
+    .places-grid, #destinations-grid{grid-template-columns:repeat(2,1fr); gap:.7em;}
+    .places-grid .place-card, #destinations-grid .place-card{padding:.75em;}
+    .places-grid .place-card h3, #destinations-grid .place-card h3{font-size:1.05rem;}
+    .places-grid .place-card .field-tag, #destinations-grid .place-card .field-tag{font-size:.68rem; padding:.2em .5em;}
   }
   .search-bar-wrap{position:relative; margin-bottom:var(--sp-3);}
   .search-bar-wrap .icon{position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--ink-muted); pointer-events:none;}
@@ -685,6 +687,14 @@
   .admin-btn{font-family:var(--font-admin); font-size:.8rem; padding:.4em .9em; border-radius:999px; border:1px solid var(--line); background:var(--bg); cursor:pointer; color:var(--ink); white-space:nowrap;}
   .admin-btn:hover{border-color:var(--forest); color:var(--forest);}
   .admin-toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--sp-2); gap:var(--sp-2); flex-wrap:wrap;}
+  /* Version 32: hàng tìm kiếm/lọc nhanh phía trên bảng Admin (Tips/Places/Trải nghiệm/Local) — dùng chung 1 khuôn */
+  .admin-filter-row{display:flex; gap:.6em; flex-wrap:wrap; margin-bottom:var(--sp-2);}
+  .admin-filter-row input[type="search"], .admin-filter-row select{
+    font-family:var(--font-admin); font-size:.85rem; padding:.55em .9em; border-radius:999px;
+    border:1px solid var(--line); background:var(--bg-raised); color:var(--ink); min-width:12rem;
+  }
+  .admin-filter-row input[type="search"]::placeholder{color:var(--ink-muted);}
+  .admin-filter-row select{cursor:pointer;}
   .admin-link-input{width:100%; min-width:13rem; font-family:var(--font-admin); font-size:.83rem; padding:.45em .65em; border-radius:var(--radius-s); border:1px solid var(--line); background:var(--bg); color:var(--ink); transition:border-color .3s, background .3s;}
   .admin-link-input::placeholder{color:var(--ink-muted);}
   .admin-link-input.is-saved{border-color:var(--forest); background:var(--forest-tint);}
@@ -1113,6 +1123,10 @@
         <div class="sh-title"><span class="sh-icon"><svg class="icon" width="19" height="19"><use href="#i-bookmark"/></svg></span><h2>Tips từ cộng đồng</h2></div>
         <p class="desc">Chỗ rẻ, đồ ngon, góc chụp đẹp, thời điểm vàng, chuyện hay — khách và Local gửi về, không phải biên tập viên ngồi viết.</p>
       </div>
+      <div class="tips-place-select-wrap">
+        <label for="tips-place-filter">📍 Chọn địa điểm trước</label>
+        <select id="tips-place-filter"><option value="all">Tất cả địa điểm</option></select>
+      </div>
       <div class="chip-row" id="tips-filters"></div>
     </section>
     <section class="wrap" style="padding-top:0;">
@@ -1337,12 +1351,24 @@
 
       <section id="adm-view-overview" class="adm-view">
         <div class="admin-topbar">
-          <div><h1>Tổng quan</h1><p class="desc">Số liệu minh hoạ — sẽ nối dữ liệu thật khi có backend/analytics.</p></div>
+          <div><h1>Tổng quan</h1><p class="desc">Số liệu thật, lấy trực tiếp từ Supabase — lượt truy cập được ghi mỗi khi khách mở trang chi tiết Điểm đến/Trải nghiệm/Local, bắt đầu tính từ Version 32.</p></div>
         </div>
         <div class="admin-stats" id="adm-stats"></div>
         <div class="admin-card">
           <h2>Lượt truy cập 7 ngày gần nhất</h2>
           <div class="chart-bars" id="adm-chart"></div>
+        </div>
+        <div class="admin-card">
+          <h2>Top 10 Điểm đến (theo lượt truy cập)</h2>
+          <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Điểm đến</th><th>Lượt truy cập</th></tr></thead><tbody id="adm-top10-places"></tbody></table></div>
+        </div>
+        <div class="admin-card">
+          <h2>Top 10 Trải nghiệm (theo lượt truy cập)</h2>
+          <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Trải nghiệm</th><th>Lượt truy cập</th></tr></thead><tbody id="adm-top10-experiences"></tbody></table></div>
+        </div>
+        <div class="admin-card">
+          <h2>Top 10 Local (theo lượt truy cập)</h2>
+          <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Local</th><th>Lượt truy cập</th></tr></thead><tbody id="adm-top10-locals"></tbody></table></div>
         </div>
         <div class="admin-card">
           <h2>Yêu cầu Book Local mới nhất</h2>
@@ -1380,6 +1406,9 @@
           <h2>Điểm đến nổi bật trên trang chủ</h2>
           <p class="desc" style="margin-bottom:var(--sp-2);">Chọn địa phương nào xuất hiện ở khối kéo ngang trên trang chủ. Sắp xếp bằng nút ↑ ↓, cũng có thể bật/tắt trực tiếp ở cột trong bảng bên dưới.</p>
           <div id="adm-curate-places" class="curate-list" style="max-width:28rem;"></div>
+        </div>
+        <div class="admin-filter-row">
+          <input type="search" id="adm-places-search" placeholder="Tìm theo địa điểm…" autocomplete="off">
         </div>
         <div class="admin-card">
           <div class="admin-table-wrap"><table class="admin-table" id="adm-table-places"></table></div>
@@ -1422,6 +1451,9 @@
             <div><h3>Lưới "Hôm nay làm gì?"</h3><div id="adm-curate-home" class="curate-list"></div></div>
           </div>
         </div>
+        <div class="admin-filter-row">
+          <input type="search" id="adm-exp-search" placeholder="Tìm theo địa điểm…" autocomplete="off">
+        </div>
         <div class="admin-card">
           <div class="admin-table-wrap"><table class="admin-table" id="adm-table-experiences"></table></div>
         </div>
@@ -1439,7 +1471,7 @@
           <div><label for="adm-local-name">Tên *</label><input id="adm-local-name" required placeholder="VD: Cô Tâm"></div>
           <div><label for="adm-local-role">Vai trò / chuyên môn *</label><input id="adm-local-role" required placeholder="VD: Trà & Cà phê Expert"></div>
           <div><label for="adm-local-place">Địa điểm *</label><input id="adm-local-place" required placeholder="VD: Bảo Lộc"></div>
-          <div><label for="adm-local-matchskill">Khớp với kỹ năng trải nghiệm</label><input id="adm-local-matchskill" list="adm-skill-options" placeholder="Trùng với 'Kỹ năng Local phù hợp' của trải nghiệm"></div>
+          <div><label for="adm-local-matchskill">Khớp với "Trải nghiệm" <span class="hint">Local này sẽ tự hiện gợi ý trong mục "Local phù hợp cho..." ở trang chi tiết trải nghiệm nào trùng giá trị này</span></label><input id="adm-local-matchskill" list="adm-skill-options" placeholder="Trùng với 'Kỹ năng Local phù hợp' đã đặt cho trải nghiệm"></div>
           <div><label for="adm-local-emoji">Emoji đại diện</label><input id="adm-local-emoji" value="🧭"></div>
           <div><label for="adm-local-lang">Ngôn ngữ</label><input id="adm-local-lang" value="Tiếng Việt"></div>
           <div><label for="adm-local-price">Giá</label><input id="adm-local-price" placeholder="VD: 300K"></div>
@@ -1462,6 +1494,9 @@
           <h2>Local Talent trên trang chủ</h2>
           <p class="desc" style="margin-bottom:var(--sp-2);">Chọn Local nào xuất hiện ở mục "Local Talent" trang chủ — nên chọn Local có nhiều tài lẻ, được khách đánh giá cao. Sắp xếp bằng nút ↑ ↓, cũng có thể bật/tắt trực tiếp ở cột trong bảng bên dưới.</p>
           <div id="adm-curate-meetlocal" class="curate-list" style="max-width:28rem;"></div>
+        </div>
+        <div class="admin-filter-row">
+          <input type="search" id="adm-locals-search" placeholder="Tìm theo địa điểm…" autocomplete="off">
         </div>
         <div class="admin-card">
           <div class="admin-table-wrap"><table class="admin-table" id="adm-table-locals"></table></div>
@@ -1489,6 +1524,10 @@
             <span class="toast" id="adm-tip-toast">Đã lưu ở trạng thái Chờ duyệt — bấm "Hiện lên site" trong bảng bên dưới khi sẵn sàng công bố.</span>
           </div>
         </form>
+        <div class="admin-filter-row">
+          <input type="search" id="adm-tips-search-place" placeholder="Tìm theo địa điểm…" autocomplete="off">
+          <select id="adm-tips-search-cat"><option value="all">Tất cả chuyên mục</option></select>
+        </div>
         <div class="admin-card">
           <div class="admin-table-wrap"><table class="admin-table" id="adm-table-tips"></table></div>
         </div>
@@ -2122,6 +2161,15 @@
     if(!sbClient) return;
     sbClient.from(table).update(patch).eq(idCol, idVal).then(function(res){ if(res.error) sbSyncWarn(context, res.error); });
   }
+  // Version 32: ghi 1 lượt truy cập thật vào bảng page_views mỗi khi khách mở trang chi tiết
+  // Điểm đến/Trải nghiệm/Local — nguồn dữ liệu thật duy nhất cho Tổng quan + Top 10 trong Admin.
+  // Không chặn UI, không báo lỗi cho khách nếu ghi thất bại (mất mạng...).
+  function logPageView(entityType, entityId){
+    if(!sbClient || !entityId) return;
+    sbClient.from('page_views').insert({ entity_type:entityType, entity_id:entityId }).then(function(res){
+      if(res && res.error) console.warn('[leisure.tips] Không ghi được lượt truy cập:', res.error.message);
+    });
+  }
   // dataUrl (đã nén qua canvas bởi readImageAsDataURL) -> upload lên Supabase Storage,
   // trả về public URL qua cb. Không có Supabase / mất mạng -> lùi về nhúng thẳng data URL
   // (giữ đúng hành vi bản demo cũ, admin không bao giờ bị chặn vì lỗi mạng).
@@ -2186,12 +2234,41 @@
     el.hidden = false;
     sitePopupShown = true;
   }
-  var VISITS_7D = [312, 288, 405, 460, 398, 512, 470];
+  // Version 32: số liệu Tổng quan giờ lấy từ bảng page_views thật trên Supabase (thay VISITS_7D giả
+  // lập trước đây). PAGE_VIEW_STATS.loaded=false cho tới khi loadPageViewStats() tải xong — trước đó
+  // các ô số liệu/biểu đồ/Top 10 hiện đúng 0, không tự bịa số trong lúc chờ tải.
+  var PAGE_VIEW_STATS = { loaded:false, days:[0,0,0,0,0,0,0], dayLabels:['T2','T3','T4','T5','T6','T7','CN'], byPlace:{}, byExperience:{}, byLocal:{} };
+
+  function loadPageViewStats(){
+    if(!sbClient) return;
+    sbClient.from('page_views').select('entity_type,entity_id,viewed_at').then(function(res){
+      if(!res || res.error){ if(res && res.error) sbSyncWarn('page_views', res.error); return; }
+      var byPlace = {}, byExperience = {}, byLocal = {};
+      var days = [0,0,0,0,0,0,0];
+      var today = new Date(); today.setHours(0,0,0,0);
+      var dayLabels = [];
+      for(var i=6;i>=0;i--){
+        var d = new Date(today); d.setDate(today.getDate()-i);
+        dayLabels.push(['CN','T2','T3','T4','T5','T6','T7'][d.getDay()]);
+      }
+      (res.data || []).forEach(function(row){
+        var map = row.entity_type === 'place' ? byPlace : row.entity_type === 'experience' ? byExperience : row.entity_type === 'local' ? byLocal : null;
+        if(map) map[row.entity_id] = (map[row.entity_id] || 0) + 1;
+        var vd = new Date(row.viewed_at); vd.setHours(0,0,0,0);
+        var diffDays = Math.round((today - vd) / 86400000);
+        if(diffDays >= 0 && diffDays < 7) days[6 - diffDays] += 1;
+      });
+      PAGE_VIEW_STATS = { loaded:true, days:days, dayLabels:dayLabels, byPlace:byPlace, byExperience:byExperience, byLocal:byLocal };
+      renderAdminStats();
+      renderAdminChart();
+      renderAdminTop10();
+    }).catch(function(){});
+  }
 
   function fmtNum(n){ return (n||0).toLocaleString('vi-VN'); }
 
   function renderAdminStats(){
-    var sumVisits = VISITS_7D.reduce(function(a,b){ return a+b; }, 0);
+    var sumVisits = PAGE_VIEW_STATS.days.reduce(function(a,b){ return a+b; }, 0);
     var sumLikes = TIPS.reduce(function(a,t){ return a+t.likes; }, 0);
     var tiles = [
       { label:'Lượt truy cập (7 ngày)', val:sumVisits, ic:'i-grid' },
@@ -2209,9 +2286,10 @@
   function renderAdminChart(){
     var el = document.getElementById('adm-chart');
     if(!el) return;
-    var max = Math.max.apply(null, VISITS_7D);
-    var days = ['T2','T3','T4','T5','T6','T7','CN'];
-    el.innerHTML = VISITS_7D.map(function(v,i){
+    var visits = PAGE_VIEW_STATS.days;
+    var days = PAGE_VIEW_STATS.dayLabels;
+    var max = Math.max.apply(null, visits.concat([1]));
+    el.innerHTML = visits.map(function(v,i){
       var h = Math.max(8, Math.round((v/max)*100));
       return '<div class="chart-bar-col"><span class="v">'+v+'</span><div class="chart-bar" style="height:'+h+'%;" title="'+days[i]+': '+v+' lượt truy cập"></div><span class="d">'+days[i]+'</span></div>';
     }).join('');
@@ -2222,10 +2300,42 @@
     return '<button class="admin-btn" data-status-toggle="'+kind+':'+id+'">'+label+'</button>';
   }
 
+  // Version 32: Top 10 theo lượt truy cập thật (từ page_views) — mỗi entry cần còn tồn tại trong dữ liệu
+  // hiện tại (nameResolver trả về falsy nếu đã bị xoá) mới hiện, tránh Top 10 lẫn mục đã xoá.
+  function top10RowsHtml(viewMap, nameResolver){
+    var entries = Object.keys(viewMap).map(function(id){ return { id:id, views:viewMap[id], name:nameResolver(id) }; })
+      .filter(function(e){ return e.name; })
+      .sort(function(a,b){ return b.views - a.views; })
+      .slice(0, 10);
+    if(!entries.length) return '<tr><td colspan="2" style="color:var(--ink-muted);">Chưa có lượt truy cập thật nào được ghi nhận.</td></tr>';
+    return entries.map(function(e, i){
+      return '<tr><td>'+(i+1)+'. '+esc(e.name)+'</td><td class="num">'+fmtNum(e.views)+'</td></tr>';
+    }).join('');
+  }
+  function renderAdminTop10(){
+    var placesEl = document.getElementById('adm-top10-places');
+    if(placesEl) placesEl.innerHTML = top10RowsHtml(PAGE_VIEW_STATS.byPlace, function(id){ return PLACES[id] ? PLACES[id].name : null; });
+    var expEl = document.getElementById('adm-top10-experiences');
+    if(expEl) expEl.innerHTML = top10RowsHtml(PAGE_VIEW_STATS.byExperience, function(id){ return EXPERIENCES[id] ? EXPERIENCES[id].title : null; });
+    var localsEl = document.getElementById('adm-top10-locals');
+    if(localsEl){
+      localsEl.innerHTML = top10RowsHtml(PAGE_VIEW_STATS.byLocal, function(id){
+        var l = LOCALS.filter(function(x){ return x.id === id; })[0];
+        return l ? l.name : null;
+      });
+    }
+  }
+
+  // Version 32: ô tìm kiếm theo địa điểm phía trên bảng Admin — Places/Trải nghiệm/Local dùng chung khuôn này
+  var admExpQuery = '';
+  var admPlacesQuery = '';
+  var admLocalsQuery = '';
   function renderAdminExperiences(){
     var el = document.getElementById('adm-table-experiences');
     if(!el) return;
-    var rows = Object.keys(EXPERIENCES).map(function(id){
+    var q = normalizeVN(admExpQuery);
+    var ids = Object.keys(EXPERIENCES).filter(function(id){ return !q || normalizeVN(EXPERIENCES[id].place).indexOf(q) > -1; });
+    var rows = ids.map(function(id){
       var x = EXPERIENCES[id];
       var inReel = REEL_ORDER.indexOf(id) > -1;
       var inHome = HOME_ORDER.indexOf(id) > -1;
@@ -2234,7 +2344,7 @@
         '<td><button type="button" class="toggle-pill'+(inHome?' is-on':'')+'" data-curate-toggle="home:'+id+'">'+(inHome?'✓ Trong lưới':'+ Lưới')+'</button></td>'+
         '<td><span class="status-pill '+x.status+'">'+(x.status==='draft'?'Đang ẩn':'Hiển thị')+'</span></td>'+
         '<td style="display:flex; gap:.4em; flex-wrap:wrap;"><button type="button" class="admin-btn" data-exp-edit="'+id+'">Sửa</button>'+statusToggleBtn('exp', id, x.status)+'</td></tr>';
-    }).join('');
+    }).join('') || '<tr><td colspan="7" style="color:var(--ink-muted);">Không có trải nghiệm nào khớp với địa điểm tìm kiếm.</td></tr>';
     el.innerHTML = '<thead><tr><th>Trải nghiệm</th><th>Địa điểm</th><th>Giá</th><th>Reel trang chủ</th><th>Lưới trang chủ</th><th>Trạng thái</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
     renderCuration();
   }
@@ -2300,7 +2410,9 @@
   function renderAdminPlaces(){
     var el = document.getElementById('adm-table-places');
     if(!el){ return; }
+    var q = normalizeVN(admPlacesQuery);
     var all = Object.keys(PLACES).map(function(k){ return PLACES[k]; }).sort(function(a,b){ return (a.position||0) - (b.position||0); });
+    if(q) all = all.filter(function(p){ return normalizeVN(p.name).indexOf(q) > -1; });
     var rows = all.map(function(p){
       var inHome = PLACES_HOME_ORDER.indexOf(p.id) > -1;
       var xpN = placeExperienceCount(p.name);
@@ -2309,7 +2421,7 @@
         '<td><button type="button" class="toggle-pill'+(inHome?' is-on':'')+'" data-curate-toggle="places:'+p.id+'">'+(inHome?'✓ Trang chủ':'+ Trang chủ')+'</button></td>'+
         '<td><span class="status-pill '+p.status+'">'+(p.status==='draft'?'Đang ẩn':'Hiển thị')+'</span></td>'+
         '<td style="display:flex; gap:.4em; flex-wrap:wrap;"><button type="button" class="admin-btn" data-place-edit="'+p.id+'">Sửa</button>'+statusToggleBtn('place', p.id, p.status)+'</td></tr>';
-    }).join('');
+    }).join('') || '<tr><td colspan="6" style="color:var(--ink-muted);">Không có địa phương nào khớp với tìm kiếm.</td></tr>';
     el.innerHTML = '<thead><tr><th>Địa phương</th><th>Trải nghiệm</th><th>Local</th><th>Trang chủ</th><th>Trạng thái</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
     renderPlacesHomeCuration();
   }
@@ -2342,13 +2454,15 @@
   function renderAdminLocals(){
     var el = document.getElementById('adm-table-locals');
     if(!el) return;
-    var rows = LOCALS.map(function(l){
+    var q = normalizeVN(admLocalsQuery);
+    var list = q ? LOCALS.filter(function(l){ return normalizeVN(l.place).indexOf(q) > -1; }) : LOCALS;
+    var rows = list.map(function(l){
       var inMeetLocal = MEETLOCAL_ORDER.indexOf(l.id) > -1;
       return '<tr><td><strong>'+esc(l.name)+'</strong> '+(l.featured ? '<span class="star-badge" style="padding:.1em .5em;">★ Local Talent</span>' : '<span class="demo-badge" style="padding:.1em .5em;">Demo</span>')+'</td><td>'+esc(l.role)+'</td><td>'+esc(l.place)+'</td><td class="num">'+esc(formatPriceUnit(l.price, l.priceUnit))+'</td>'+
         '<td><button type="button" class="toggle-pill'+(inMeetLocal?' is-on':'')+'" data-curate-toggle="meetlocal:'+l.id+'">'+(inMeetLocal?'✓ Local Talent':'+ Local Talent')+'</button></td>'+
         '<td><span class="status-pill '+l.status+'">'+(l.status==='draft'?'Đang ẩn':'Hiển thị')+'</span></td>'+
         '<td style="display:flex; gap:.4em; flex-wrap:wrap;"><button type="button" class="admin-btn" data-local-edit="'+l.id+'">Sửa</button>'+statusToggleBtn('local', l.id, l.status)+'</td></tr>';
-    }).join('');
+    }).join('') || '<tr><td colspan="7" style="color:var(--ink-muted);">Không có Local nào khớp với địa điểm tìm kiếm.</td></tr>';
     el.innerHTML = '<thead><tr><th>Local</th><th>Vai trò</th><th>Địa điểm</th><th>Giá</th><th>Local Talent trang chủ</th><th>Trạng thái</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
     renderMeetlocalCuration();
   }
@@ -2380,17 +2494,24 @@
     wrap.innerHTML = (MEETLOCAL_ORDER.length ? MEETLOCAL_ORDER.map(function(id){ return curateRowHtmlLocal(id, MEETLOCAL_ORDER); }).join('') : '<p style="color:var(--ink-muted);font-size:.83rem;">Chưa chọn Local nào nổi bật trên trang chủ.</p>') + curateAddRowHtmlLocal(MEETLOCAL_ORDER);
   }
 
+  // Version 32: kết hợp lọc theo địa điểm (gõ tự do, không phân biệt dấu) + chuyên mục (chọn từ danh sách có sẵn)
+  var admTipsPlaceQuery = '';
+  var admTipsCatFilter = 'all';
   function renderAdminTips(){
     var el = document.getElementById('adm-table-tips');
     if(!el) return;
-    var rows = TIPS.map(function(t){
+    var q = normalizeVN(admTipsPlaceQuery);
+    var list = TIPS.filter(function(t){
+      return (!q || normalizeVN(t.place).indexOf(q) > -1) && (admTipsCatFilter === 'all' || t.cat === admTipsCatFilter);
+    });
+    var rows = list.map(function(t){
       var c = TIP_CATS[t.cat];
-      return '<tr><td style="max-width:24rem;">'+esc(t.title)+'</td><td>'+c.emoji+' '+c.label+'</td><td>'+esc(t.author)+' · '+esc(t.type)+'</td>'+
+      return '<tr><td style="max-width:24rem;">'+esc(t.title)+'</td><td>'+c.emoji+' '+c.label+'</td><td>📍 '+esc(t.place)+'</td><td>'+esc(t.author)+' · '+esc(t.type)+'</td>'+
         '<td class="num">'+fmtNum(t.views)+'</td><td class="num">♥ '+fmtNum(t.likes)+'</td>'+
         '<td><span class="status-pill '+t.status+'">'+(t.status==='draft'?'Chờ duyệt':'Đã đăng')+'</span></td>'+
         '<td style="display:flex; gap:.4em; flex-wrap:wrap;"><button type="button" class="admin-btn" data-tip-edit="'+t.id+'">Sửa</button>'+statusToggleBtn('tip', t.id, t.status)+'</td></tr>';
-    }).join('');
-    el.innerHTML = '<thead><tr><th>Tip</th><th>Chuyên mục</th><th>Người gửi</th><th>Views</th><th>Likes</th><th>Trạng thái</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
+    }).join('') || '<tr><td colspan="8" style="color:var(--ink-muted);">Không có Tip nào khớp với bộ lọc.</td></tr>';
+    el.innerHTML = '<thead><tr><th>Tip</th><th>Chuyên mục</th><th>Địa điểm</th><th>Người gửi</th><th>Views</th><th>Likes</th><th>Trạng thái</th><th></th></tr></thead><tbody>'+rows+'</tbody>';
   }
 
   function renderAdminReviews(){
@@ -2427,6 +2548,7 @@
     populateAdminFormOptions();
     renderAdminStats();
     renderAdminChart();
+    renderAdminTop10();
     renderAdminExperiences();
     renderAdminLocals();
     renderAdminTips();
@@ -2481,8 +2603,23 @@
   }
 
   var tipsFilter = 'all';
+  var tipsPlaceFilter = 'all';
 
   function timeAgo(){ return ''; }
+
+  // Version 32: chọn địa điểm trước khi chọn chuyên mục — danh sách địa điểm lấy từ chính các Tips
+  // đã công bố (không tự bịa thêm địa điểm chưa có Tips nào), sắp theo alphabet tiếng Việt.
+  function renderTipPlaceFilter(){
+    var sel = document.getElementById('tips-place-filter');
+    if(!sel) return;
+    var places = [];
+    TIPS.forEach(function(t){ if(t.status !== 'draft' && places.indexOf(t.place) === -1) places.push(t.place); });
+    places.sort(function(a,b){ return a.localeCompare(b, 'vi'); });
+    var prev = tipsPlaceFilter;
+    sel.innerHTML = '<option value="all">Tất cả địa điểm</option>'+
+      places.map(function(p){ return '<option value="'+esc(p)+'">'+esc(p)+'</option>'; }).join('');
+    if(places.indexOf(prev) > -1 || prev === 'all'){ sel.value = prev; } else { tipsPlaceFilter = 'all'; sel.value = 'all'; }
+  }
 
   function renderTipFilters(){
     var wrap = document.getElementById('tips-filters');
@@ -2498,7 +2635,18 @@
   function renderTips(){
     var grid = document.getElementById('tips-grid');
     if(!grid) return;
-    var list = TIPS.filter(function(t){ return t.status !== 'draft' && (tipsFilter === 'all' || t.cat === tipsFilter); });
+    var list = TIPS.filter(function(t){
+      return t.status !== 'draft' &&
+        (tipsPlaceFilter === 'all' || t.place === tipsPlaceFilter) &&
+        (tipsFilter === 'all' || t.cat === tipsFilter);
+    });
+    if(!list.length){
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">'+
+        '<span class="eyebrow">Không tìm thấy</span>'+
+        '<p>Chưa có Tip nào khớp với bộ lọc đang chọn.</p>'+
+      '</div>';
+      return;
+    }
     grid.innerHTML = list.map(function(t){
       var c = TIP_CATS[t.cat];
       return '<article class="tip-card" data-tip="'+t.id+'">'+
@@ -2768,6 +2916,11 @@
     if(catSel && !catSel.options.length){
       catSel.innerHTML = Object.keys(TIP_CATS).map(function(k){ return '<option value="'+k+'">'+TIP_CATS[k].emoji+' '+TIP_CATS[k].label+'</option>'; }).join('');
     }
+    var catFilterSel = document.getElementById('adm-tips-search-cat');
+    if(catFilterSel && catFilterSel.options.length < 2){
+      catFilterSel.innerHTML = '<option value="all">Tất cả chuyên mục</option>'+
+        Object.keys(TIP_CATS).map(function(k){ return '<option value="'+k+'">'+TIP_CATS[k].emoji+' '+TIP_CATS[k].label+'</option>'; }).join('');
+    }
     var dl = document.getElementById('adm-skill-options');
     if(dl){
       var skills = {};
@@ -2850,6 +3003,7 @@
     renderMeetLocal();
     renderPlacesReel();
     renderDestinations();
+    renderTipPlaceFilter();
     renderTipFilters();
     renderTips();
     renderReviews();
@@ -2867,6 +3021,7 @@
   function openExperience(id){
     var x = EXPERIENCES[id];
     if(!x) return;
+    logPageView('experience', id);
     currentExpId = id;
     document.getElementById('xp-crumb').textContent = x.title;
     document.getElementById('xp-place-tag').innerHTML = '📍 <b>'+esc(x.place)+'</b>';
@@ -3017,6 +3172,8 @@
     if(!ordered.length) ordered = all.slice(0, 6);
     el.innerHTML = ordered.map(placesReelCardHtml).join('');
   }
+  // Version 32: bố cục card giờ giống hệt destinationCardHtml (trang Locals) — bỏ dòng mô tả (hook),
+  // chỉ còn huy hiệu số lượng + tên điểm đến, cùng size ảnh/font với trang Locals (CSS dùng chung ở trên).
   function placesGridCardHtml(p, i){
     var n = placeExperienceCount(p.name);
     return '<button class="place-card" data-place-open="'+esc(p.id)+'">'+
@@ -3024,7 +3181,7 @@
       '<div class="scrim"></div>'+
       '<div class="content">'+
         '<span class="field-tag" style="align-self:flex-start; background:rgba(10,14,8,.4); border-color:rgba(255,255,255,.4); color:var(--on-forest);">'+n+' Trải nghiệm</span>'+
-        '<h3>'+esc(p.name)+'</h3>'+(p.hook ? '<p class="hook">'+esc(p.hook)+'</p>' : '')+
+        '<h3>'+esc(p.name)+'</h3>'+
       '</div>'+
     '</button>';
   }
@@ -3089,6 +3246,7 @@
   function openPlace(placeId){
     var p = PLACES[placeId];
     if(!p) return;
+    logPageView('place', placeId);
     currentPlaceDetailId = placeId;
     currentLocalsFilterExpId = null;
     currentLocalsFilterPlace = null;
@@ -3202,6 +3360,7 @@
   function openLocalProfile(localId){
     var l = LOCALS.filter(function(x){ return x.id === localId; })[0];
     if(!l) return;
+    logPageView('local', localId);
     currentLocalId = localId;
     document.getElementById('lp-crumb').textContent = l.name;
     var lpAv = document.getElementById('lp-avatar');
@@ -3365,6 +3524,7 @@
       var targetView = admNavBtn.dataset.adminNav;
       document.querySelectorAll('.admin-nav-item[data-admin-nav]').forEach(function(b){ b.classList.toggle('is-active', b === admNavBtn); });
       document.querySelectorAll('.adm-view').forEach(function(v){ v.hidden = (v.id !== 'adm-view-'+targetView); });
+      if(targetView === 'overview') loadPageViewStats();
       window.scrollTo({top:0});
       return;
     }
@@ -3533,6 +3693,8 @@
   if(placesSearchInput){ placesSearchInput.addEventListener('input', function(){ renderPlacesGrid(placesSearchInput.value); }); }
   var destinationsSearchInput = document.getElementById('destinations-search');
   if(destinationsSearchInput){ destinationsSearchInput.addEventListener('input', function(){ renderDestinations(destinationsSearchInput.value); }); }
+  var tipsPlaceFilterSel = document.getElementById('tips-place-filter');
+  if(tipsPlaceFilterSel){ tipsPlaceFilterSel.addEventListener('change', function(){ tipsPlaceFilter = tipsPlaceFilterSel.value; renderTips(); }); }
 
   function openReviewLightbox(ytId, title, isVertical){
     var el = document.getElementById('review-lightbox');
@@ -3743,6 +3905,7 @@
     document.getElementById('admin-login').hidden = true;
     document.getElementById('admin-shell').hidden = false;
     renderAdminAll();
+    loadPageViewStats();
   }
 
   var admLoginForm = document.getElementById('admin-login-form');
@@ -3879,6 +4042,22 @@
   wireAddForm('adm-tip-add-toggle', 'adm-tip-form', 'adm-tip-cancel');
   wireAddForm('adm-review-add-toggle', 'adm-review-form', 'adm-review-cancel');
   wireAddForm('adm-place-add-toggle', 'adm-place-form', 'adm-place-cancel');
+  // Version 32: ô tìm kiếm/lọc phía trên bảng Admin → Tips (kết hợp Địa điểm + Chuyên mục)
+  (function(){
+    var placeInput = document.getElementById('adm-tips-search-place');
+    var catSelect = document.getElementById('adm-tips-search-cat');
+    if(placeInput) placeInput.addEventListener('input', function(){ admTipsPlaceQuery = placeInput.value; renderAdminTips(); });
+    if(catSelect) catSelect.addEventListener('change', function(){ admTipsCatFilter = catSelect.value; renderAdminTips(); });
+  })();
+  // Version 32: ô tìm kiếm theo địa điểm phía trên bảng Admin → Places/Trải nghiệm/Local
+  (function(){
+    var placesInput = document.getElementById('adm-places-search');
+    var expInput = document.getElementById('adm-exp-search');
+    var localsInput = document.getElementById('adm-locals-search');
+    if(placesInput) placesInput.addEventListener('input', function(){ admPlacesQuery = placesInput.value; renderAdminPlaces(); });
+    if(expInput) expInput.addEventListener('input', function(){ admExpQuery = expInput.value; renderAdminExperiences(); });
+    if(localsInput) localsInput.addEventListener('input', function(){ admLocalsQuery = localsInput.value; renderAdminLocals(); });
+  })();
   (function(){
     var placeCancelBtn = document.getElementById('adm-place-cancel');
     if(placeCancelBtn){
