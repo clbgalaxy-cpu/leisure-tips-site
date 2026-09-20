@@ -411,6 +411,10 @@
     font-size:.88rem; color:var(--ink-muted);
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em;
   }
+  /* Tên + thẻ địa điểm + huy hiệu Local Talent đôi khi xuống 2 dòng nếu tên dài — giữ chiều
+     cao tối thiểu 2 dòng cho hàng này để phần Ngôn ngữ/Chi phí bên dưới luôn thẳng hàng
+     giữa các Local dù badge-row xuống 1 hay 2 dòng. */
+  .local-card-body .badge-row{min-height:2.3em;}
   /* Kỹ năng/Ngôn ngữ/Chi phí — tách riêng từng khối dọc, luôn neo ở đáy card (margin-top:auto)
      để các Local hiển thị cân xứng nhau, không lệch theo độ dài đoạn bio phía trên */
   .lc-fields{display:flex; flex-direction:column; gap:.5em; margin-top:auto;}
@@ -431,6 +435,7 @@
   .skill-bar span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .skill-bar .track{height:5px; background:var(--bg-sunken); border-radius:999px; overflow:hidden;}
   .skill-bar .fill{height:100%; background:var(--forest); border-radius:999px;}
+  .skill-bar-more{font-size:.72rem; color:var(--ink-muted); padding-top:.1em;}
 
   /* review cards */
   .review-card{border:1px solid var(--line); border-radius:var(--radius-m); background:var(--bg-raised); overflow:hidden; display:block; text-decoration:none; color:inherit; transition:border-color .2s, transform .2s;}
@@ -609,6 +614,7 @@
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em;
   }
   .local-list-card .skills-inline{display:flex; gap:.4em; flex-wrap:wrap;}
+  .local-list-card .badge-row{min-height:2.3em;}
   .empty-state{border:1px dashed var(--line); border-radius:var(--radius-m); padding:var(--sp-4); text-align:center; color:var(--ink-muted); display:flex; flex-direction:column; gap:var(--sp-2); align-items:center;}
 
   .lp-hero{display:flex; gap:var(--sp-3); align-items:flex-start; padding-block:var(--sp-4) var(--sp-2); flex-wrap:wrap;}
@@ -1013,8 +1019,8 @@
 
     <section class="wrap" id="pd-reviews-section">
       <div class="section-head">
-        <h2 id="pd-reviews-heading">Review về nơi này</h2>
-        <p class="desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
+        <h2 id="pd-reviews-heading">Người thật. Review thật.</h2>
+        <p class="desc" id="pd-reviews-desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
       </div>
       <div class="grid grid-3" id="pd-reviews-grid"></div>
     </section>
@@ -1083,10 +1089,10 @@
       </div>
     </section>
 
-    <section class="wrap" id="xp-reviews-section" hidden>
+    <section class="wrap" id="xp-reviews-section">
       <div class="section-head">
-        <h2 id="xp-reviews-heading">Review về trải nghiệm này</h2>
-        <p class="desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
+        <h2 id="xp-reviews-heading">Người thật. Review thật.</h2>
+        <p class="desc" id="xp-reviews-desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
       </div>
       <div class="grid grid-3" id="xp-reviews-grid"></div>
     </section>
@@ -1170,10 +1176,10 @@
       <div class="section-head"><h2>Kỹ năng</h2></div>
       <div class="skill-bars" id="lp-skills" style="max-width:28rem;"></div>
     </section>
-    <section class="wrap" id="lp-reviews-section" hidden>
+    <section class="wrap" id="lp-reviews-section">
       <div class="section-head">
-        <h2 id="lp-reviews-heading">Review về Local này</h2>
-        <p class="desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
+        <h2 id="lp-reviews-heading">Người thật. Review thật.</h2>
+        <p class="desc" id="lp-reviews-desc">Người thật đã trải nghiệm — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.</p>
       </div>
       <div class="grid grid-3" id="lp-reviews-grid"></div>
     </section>
@@ -2338,7 +2344,7 @@
     if(!el) return;
     var rows = LOCALS.map(function(l){
       var inMeetLocal = MEETLOCAL_ORDER.indexOf(l.id) > -1;
-      return '<tr><td><strong>'+esc(l.name)+'</strong> '+(l.featured ? '<span class="star-badge" style="padding:.1em .5em;">★ Local Talent</span>' : '<span class="demo-badge" style="padding:.1em .5em;">Demo</span>')+'</td><td>'+esc(l.role)+'</td><td>'+esc(l.place)+'</td><td class="num">'+esc(l.price)+'/'+esc(l.priceUnit || 'buổi')+'</td>'+
+      return '<tr><td><strong>'+esc(l.name)+'</strong> '+(l.featured ? '<span class="star-badge" style="padding:.1em .5em;">★ Local Talent</span>' : '<span class="demo-badge" style="padding:.1em .5em;">Demo</span>')+'</td><td>'+esc(l.role)+'</td><td>'+esc(l.place)+'</td><td class="num">'+esc(formatPriceUnit(l.price, l.priceUnit))+'</td>'+
         '<td><button type="button" class="toggle-pill'+(inMeetLocal?' is-on':'')+'" data-curate-toggle="meetlocal:'+l.id+'">'+(inMeetLocal?'✓ Local Talent':'+ Local Talent')+'</button></td>'+
         '<td><span class="status-pill '+l.status+'">'+(l.status==='draft'?'Đang ẩn':'Hiển thị')+'</span></td>'+
         '<td style="display:flex; gap:.4em; flex-wrap:wrap;"><button type="button" class="admin-btn" data-local-edit="'+l.id+'">Sửa</button>'+statusToggleBtn('local', l.id, l.status)+'</td></tr>';
@@ -2527,18 +2533,49 @@
     return l.featured ? '<span class="star-badge">★ Local Talent</span>' : '';
   }
 
-  // Khối Kỹ năng/Ngôn ngữ/Chi phí tách riêng dọc xuống, gán ở cuối card (margin-top:auto) —
-  // để phần này luôn thẳng hàng giữa các Local dù đoạn bio dài ngắn khác nhau.
+  // Dữ liệu cũ (trước khi tách cột price/price_unit ở Version 29) có thể đã lưu sẵn
+  // đơn vị bên trong price (VD "300K/buổi") — nếu nối thêm priceUnit vô điều kiện sẽ
+  // ra "300K/buổi/buổi". Hàm này tự nhận diện và không nối lặp.
+  function formatPriceUnit(price, unit){
+    var p = (price == null ? '' : String(price)).trim();
+    if(p.indexOf('/') !== -1) return p;
+    return p + '/' + (unit || 'buổi');
+  }
+
+  // Khối Ngôn ngữ/Chi phí luôn đứng ngay sau đoạn bio (chiều cao bio đã cố định qua line-clamp)
+  // nên luôn thẳng hàng giữa các Local; Kỹ năng đặt sau cùng vì số lượng kỹ năng có thể
+  // khác nhau giữa từng Local — để cuối cùng thì không kéo lệch vị trí của Ngôn ngữ/Chi phí.
   function localFieldsHtml(l, skillsInnerHtml){
     return '<div class="lc-fields">'+
-      (skillsInnerHtml ? '<div class="lc-field lc-field-skills"><span class="lc-label">Kỹ năng</span>'+skillsInnerHtml+'</div>' : '')+
       '<div class="lc-field lc-field-lang"><span class="lc-label">Ngôn ngữ</span><span class="lc-value">🗣 '+esc(l.lang)+'</span></div>'+
-      '<div class="lc-field lc-field-price"><span class="lc-label">Chi phí</span><span class="lc-value price num">Từ '+esc(l.price)+'/'+esc(l.priceUnit || 'buổi')+'</span></div>'+
+      '<div class="lc-field lc-field-price"><span class="lc-label">Chi phí</span><span class="lc-value price num">Từ '+esc(formatPriceUnit(l.price, l.priceUnit))+'</span></div>'+
+      (skillsInnerHtml ? '<div class="lc-field lc-field-skills"><span class="lc-label">Kỹ năng</span>'+skillsInnerHtml+'</div>' : '')+
     '</div>';
   }
 
+  // Giới hạn số kỹ năng hiện trong card gọn (trang chủ/danh sách Local) để phần Kỹ năng
+  // không phình to khác nhau quá nhiều giữa các Local — xem đầy đủ ở trang hồ sơ chi tiết.
+  var LOCAL_CARD_MAX_SKILLS = 3;
+  function skillTagsCappedHtml(skills, max){
+    if(!skills || !skills.length) return '';
+    var shown = skills.slice(0, max);
+    var extra = skills.length - shown.length;
+    var tags = shown.map(function(s){ return '<span class="tag">'+esc(s.label)+'</span>'; }).join('');
+    if(extra > 0) tags += '<span class="tag" style="opacity:.65;">+'+extra+'</span>';
+    return '<div class="skills-inline">'+tags+'</div>';
+  }
+  function skillBarsCappedHtml(skills, max){
+    if(!skills || !skills.length) return '';
+    var shown = skills.slice(0, max);
+    var extra = skills.length - shown.length;
+    var html = '<div class="skill-bars">'+shown.map(function(s){ return '<div class="skill-bar"><span>'+esc(s.label)+'</span><div class="track"><div class="fill" style="width:'+s.lvl+'%;"></div></div></div>'; }).join('');
+    if(extra > 0) html += '<div class="skill-bar-more">+'+extra+' kỹ năng khác</div>';
+    html += '</div>';
+    return html;
+  }
+
   function localCardHtml(l){
-    var skillsHtml = (l.skills && l.skills.length) ? '<div class="skills-inline">'+l.skills.map(function(s){ return '<span class="tag">'+esc(s.label)+'</span>'; }).join('')+'</div>' : '';
+    var skillsHtml = skillTagsCappedHtml(l.skills, LOCAL_CARD_MAX_SKILLS);
     return '<button class="local-list-card" data-local="'+l.id+'">'+
       '<div class="head">'+avatarHtml(l, 'sm')+
         '<div><div class="badge-row"><h4 style="font-size:1.02rem;">'+esc(l.name)+'</h4>'+featuredBadgeHtml(l)+'</div>'+
@@ -2553,7 +2590,7 @@
   }
 
   function meetLocalCardHtml(l){
-    var skillsHtml = (l.skills && l.skills.length) ? '<div class="skill-bars">'+l.skills.map(function(s){ return '<div class="skill-bar"><span>'+esc(s.label)+'</span><div class="track"><div class="fill" style="width:'+s.lvl+'%;"></div></div></div>'; }).join('')+'</div>' : '';
+    var skillsHtml = skillBarsCappedHtml(l.skills, LOCAL_CARD_MAX_SKILLS);
     return '<button type="button" class="local-card" data-local="'+l.id+'">'+
       '<div class="art" style="'+localArtStyle(l)+'">'+(l.photo ? '' : '<span class="art-emoji">'+esc(l.emoji)+'</span>')+'</div>'+
       '<div class="local-card-body">'+
@@ -2657,6 +2694,30 @@
     }
     if(r.link){ return '<a class="review-card" href="'+esc(r.link)+'" target="_blank" rel="noopener">'+inner+'</a>'; }
     return '<div class="review-card">'+inner+'</div>';
+  }
+
+  // Mục "Người thật. Review thật." trong trang con (Places/Trải nghiệm/Local) — luôn hiện
+  // tiêu đề mục lớn, kể cả khi chưa có review nào được gán (chỉ phần lưới đổi giữa danh sách
+  // review thật và trạng thái "chưa có" — không ẩn nguyên cả mục như trước Version 31).
+  function renderReviewsBlock(headingId, descId, gridId, reviews, contextLabel){
+    var headingEl = document.getElementById(headingId);
+    if(headingEl) headingEl.textContent = 'Người thật. Review thật.';
+    var descEl = document.getElementById(descId);
+    if(descEl){
+      descEl.textContent = reviews.length
+        ? ('Đánh giá thật về '+contextLabel+' — không copy nội dung KOL/KOC, chỉ liên kết tới nguồn gốc.')
+        : ('Chưa có review nào được gán cho '+contextLabel+' — sẽ cập nhật khi có khách chia sẻ trải nghiệm thật.');
+    }
+    var gridEl = document.getElementById(gridId);
+    if(!gridEl) return;
+    if(reviews.length){
+      gridEl.innerHTML = reviews.map(reviewCardHtml).join('');
+    } else {
+      gridEl.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">'+
+        '<span class="eyebrow">Chưa có Review</span>'+
+        '<p>Vào Admin → Reviews để gán review thật cho mục này.</p>'+
+      '</div>';
+    }
   }
 
   function renderReviews(){
@@ -2835,16 +2896,7 @@
     var related = Object.keys(EXPERIENCES).filter(function(k){ return k !== id && isPublished(k); }).slice(0,3);
     document.getElementById('xp-related-grid').innerHTML = related.map(gridCard).join('');
     var xpMatchedReviews = REVIEWS.filter(function(r){ return r.status !== 'draft' && r.experienceId === id; });
-    var xpReviewsSection = document.getElementById('xp-reviews-section');
-    document.getElementById('xp-reviews-heading').textContent = 'Review về '+x.title;
-    var xpReviewsGrid = document.getElementById('xp-reviews-grid');
-    if(xpMatchedReviews.length){
-      xpReviewsSection.hidden = false;
-      xpReviewsGrid.innerHTML = xpMatchedReviews.map(reviewCardHtml).join('');
-    } else {
-      xpReviewsSection.hidden = true;
-      xpReviewsGrid.innerHTML = '';
-    }
+    renderReviewsBlock('xp-reviews-heading', 'xp-reviews-desc', 'xp-reviews-grid', xpMatchedReviews, x.title);
     go('experience', {id:id});
   }
 
@@ -2966,10 +3018,14 @@
     el.innerHTML = ordered.map(placesReelCardHtml).join('');
   }
   function placesGridCardHtml(p, i){
+    var n = placeExperienceCount(p.name);
     return '<button class="place-card" data-place-open="'+esc(p.id)+'">'+
       '<div class="art" style="'+placeCardArtStyle(p, i)+'"></div>'+
       '<div class="scrim"></div>'+
-      '<div class="content"><h3>'+esc(p.name)+'</h3>'+(p.hook ? '<p class="hook">'+esc(p.hook)+'</p>' : '')+'</div>'+
+      '<div class="content">'+
+        '<span class="field-tag" style="align-self:flex-start; background:rgba(10,14,8,.4); border-color:rgba(255,255,255,.4); color:var(--on-forest);">'+n+' Trải nghiệm</span>'+
+        '<h3>'+esc(p.name)+'</h3>'+(p.hook ? '<p class="hook">'+esc(p.hook)+'</p>' : '')+
+      '</div>'+
     '</button>';
   }
   function renderPlacesGrid(query){
@@ -3081,16 +3137,7 @@
     var matchedReviews = REVIEWS.filter(function(r){
       return r.status !== 'draft' && (r.place === p.name || (r.localId && matchedLocalIds[r.localId]));
     });
-    var reviewsSection = document.getElementById('pd-reviews-section');
-    document.getElementById('pd-reviews-heading').textContent = 'Review về '+p.name;
-    var reviewsGrid = document.getElementById('pd-reviews-grid');
-    if(matchedReviews.length){
-      reviewsSection.hidden = false;
-      reviewsGrid.innerHTML = matchedReviews.map(reviewCardHtml).join('');
-    } else {
-      reviewsSection.hidden = true;
-      reviewsGrid.innerHTML = '';
-    }
+    renderReviewsBlock('pd-reviews-heading', 'pd-reviews-desc', 'pd-reviews-grid', matchedReviews, p.name);
 
     var pback = document.getElementById('profile-back');
     if(pback) pback.textContent = '← '+p.name;
@@ -3173,19 +3220,10 @@
     document.getElementById('lp-place').innerHTML = '📍 <b>'+esc(l.place)+'</b>';
     document.getElementById('lp-bio').textContent = l.bio;
     document.getElementById('lp-lang').textContent = l.lang;
-    document.getElementById('lp-price').textContent = l.price + '/' + (l.priceUnit || 'buổi');
+    document.getElementById('lp-price').textContent = formatPriceUnit(l.price, l.priceUnit);
     document.getElementById('lp-skills').innerHTML = skillBarsHtml(l.skills);
     var lpMatchedReviews = REVIEWS.filter(function(r){ return r.status !== 'draft' && r.localId === l.id; });
-    var lpReviewsSection = document.getElementById('lp-reviews-section');
-    document.getElementById('lp-reviews-heading').textContent = 'Review về '+l.name;
-    var lpReviewsGrid = document.getElementById('lp-reviews-grid');
-    if(lpMatchedReviews.length){
-      lpReviewsSection.hidden = false;
-      lpReviewsGrid.innerHTML = lpMatchedReviews.map(reviewCardHtml).join('');
-    } else {
-      lpReviewsSection.hidden = true;
-      lpReviewsGrid.innerHTML = '';
-    }
+    renderReviewsBlock('lp-reviews-heading', 'lp-reviews-desc', 'lp-reviews-grid', lpMatchedReviews, l.name);
     document.getElementById('lp-book-heading').textContent = 'Đặt lịch với '+l.name;
     var toast = document.getElementById('lp-toast');
     toast.textContent = 'Đã gửi yêu cầu — '+l.name+' sẽ chủ động liên hệ qua Zalo/điện thoại (demo).';
