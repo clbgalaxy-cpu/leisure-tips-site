@@ -1054,7 +1054,7 @@
       <div class="xp-meta">
         <span class="field-tag"><b class="num" id="xp-duration"></b></span>
         <span class="field-tag" id="xp-diff"></span>
-        <span class="field-tag">Giá <b class="num" id="xp-price"></b></span>
+        <span class="field-tag">Chi phí trung bình: <b class="num" id="xp-price"></b></span>
         <button class="btn btn-primary btn-sm" id="xp-book-cta"><svg class="icon" width="15" height="15"><use href="#i-phone"/></svg>Book a Local</button>
       </div>
     </section>
@@ -2142,6 +2142,15 @@
       if(typeof populateAdminFormOptions === 'function') populateAdminFormOptions();
       var shell = document.getElementById('admin-shell');
       if(shell && !shell.hidden && typeof renderAdminAll === 'function') renderAdminAll();
+      // Version 33: nếu lúc boot đang cần khôi phục 1 trang con theo ID (reload F5) mà dữ liệu
+      // demo ban đầu chưa có đúng ID đó, thử lại đúng route này 1 lần nữa giờ dữ liệu thật đã tải xong.
+      if(bootRouteState){
+        var retryRoute = bootRouteState;
+        bootRouteState = null;
+        suppressHistoryPush = true;
+        applyHistoryRoute(retryRoute);
+        suppressHistoryPush = false;
+      }
     }).catch(function(err){
       setSyncBadge(false);
       console.warn('[leisure.tips] Không tải được dữ liệu Supabase, đang dùng dữ liệu demo:', err && err.message);
@@ -2765,7 +2774,7 @@
       '<div class="card-body">'+
         (x.demo ? '<div class="badge-row"><span class="tag">Demo</span></div>' : '') +
         '<h4>'+esc(x.title)+'</h4>'+
-        '<div class="meta-row"><span>'+esc(x.place)+'</span><span class="num">'+esc(x.duration)+'</span><span>'+esc(x.diff)+'</span><span class="price num">Từ '+esc(x.price)+'</span></div>'+
+        '<div class="meta-row"><span>'+esc(x.place)+'</span><span class="num">'+esc(x.duration)+'</span><span>'+esc(x.diff)+'</span><span class="price num">Chi phí trung bình: '+esc(x.price)+'</span></div>'+
       '</div></button>';
   }
 
@@ -4646,8 +4655,25 @@
   }
 
   renderStatic();
-  updateNavActive('home', true);
-  try{ history.replaceState({view:'home'}, '', '#home'); }catch(e){}
+  // Version 33 — sửa lỗi: F5/reload ở 1 trang con lại quay về trang chủ. Nguyên nhân cũ: dòng
+  // history.replaceState({view:'home'}...) luôn chạy vô điều kiện ở đây, ghi đè state của trang
+  // đang xem thành 'home' mỗi lần tải trang — kể cả khi trình duyệt vẫn đang giữ đúng history.state
+  // của trang con đó qua lần reload. Giờ đọc lại history.state hiện có trước, đúng trang nào thì dựng
+  // lại đúng trang đó (không đẩy thêm history mới); chỉ khi hoàn toàn chưa có state (lần đầu vào site)
+  // mới mặc định về trang chủ như cũ. Route cần tra theo ID (trải nghiệm/điểm đến/Local) mà dữ liệu
+  // demo ban đầu chưa có id đó sẽ được thử lại 1 lần nữa ngay sau khi loadLiveData() tải xong bên dưới.
+  var bootRouteState = null;
+  try{ bootRouteState = history.state; }catch(e){}
+  if(bootRouteState && bootRouteState.view && bootRouteState.view !== 'home'){
+    suppressHistoryPush = true;
+    applyHistoryRoute(bootRouteState);
+    suppressHistoryPush = false;
+    if(views[bootRouteState.view] && !views[bootRouteState.view].hidden){ bootRouteState = null; }
+  } else {
+    updateNavActive('home', true);
+    try{ history.replaceState({view:'home'}, '', '#home'); }catch(e){}
+    bootRouteState = null;
+  }
   setSyncBadge(false);
   loadLiveData();
 
