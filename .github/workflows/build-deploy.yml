@@ -1,0 +1,60 @@
+name: Build & Deploy (SEO prerender)
+
+# Version 34 — Bước 1+2 (URL thật + prerender SEO). Tự động build lại toàn bộ site tĩnh (trang chủ +
+# từng trang Trải nghiệm/Địa điểm/Local + sitemap.xml/robots.txt) và tự push lên nhánh này để GitHub
+# Pages (đang cấu hình deploy từ nhánh này, kèm CNAME leisure.tips) tự cập nhật theo — không cần ai
+# chạy tay. Chạy máy chủ GitHub (không bị chặn mạng như máy dev) nên luôn lấy được dữ liệu THẬT mới
+# nhất từ Supabase.
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'src/**'
+  schedule:
+    # Mỗi 6 tiếng — bắt các thay đổi nội dung chỉ làm trong Admin (không qua git push), ví dụ thêm 1
+    # Trải nghiệm/Địa điểm/Local mới hoặc đổi trạng thái công bố.
+    - cron: '0 */6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: src
+        run: npm install
+
+      - name: Install Playwright Chromium
+        working-directory: src
+        run: npx playwright install --with-deps chromium
+
+      - name: Build standalone site (index.html/404.html/.nojekyll)
+        working-directory: src
+        run: node build_standalone.js
+
+      - name: Build prerendered SEO pages + sitemap.xml + robots.txt
+        working-directory: src
+        run: node build_prerender.js
+
+      - name: Commit & push nếu có thay đổi
+        run: |
+          git config user.name "leisure-tips-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html 404.html .nojekyll robots.txt sitemap.xml trai-nghiem dia-diem local
+          if git diff --cached --quiet; then
+            echo "Không có thay đổi — bỏ qua commit."
+            exit 0
+          fi
+          git commit -m "Auto build: cập nhật trang tĩnh SEO ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+          git push

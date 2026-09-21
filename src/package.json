@@ -1,0 +1,12 @@
+{
+  "name": "leisure-tips-build",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Build script cho leisure.tips — đóng gói fragment thành site tĩnh (build_standalone.js) và build cây trang tĩnh SEO prerender cho từng Trải nghiệm/Địa điểm/Local (build_prerender.js). Chạy tự động qua GitHub Actions (.github/workflows/build-deploy.yml); có thể chạy tay: npm install && npx playwright install --with-deps chromium && npm run build.",
+  "scripts": {
+    "build": "node build_standalone.js && node build_prerender.js"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}
